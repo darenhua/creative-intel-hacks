@@ -5,7 +5,8 @@ import { createServerClient } from "@/lib/supabase/server";
 export async function updateJob(
     jobId: string,
     demographic: string,
-    adsId: string
+    adsId: string,
+    isDogWalker: boolean = false
 ) {
     const supabase = await createServerClient();
 
@@ -14,6 +15,7 @@ export async function updateJob(
         .update({
             demographic: demographic,
             ads_id: adsId,
+            is_dog_walker: isDogWalker,
         })
         .eq("id", jobId)
         .select()

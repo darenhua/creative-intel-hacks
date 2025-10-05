@@ -4,24 +4,8 @@ import { useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import { motion, AnimatePresence } from "motion/react";
-import {
-    Upload,
-    ChevronLeft,
-    LogOut,
-    ChevronDown,
-    ChevronUp,
-    Filter,
-} from "lucide-react";
-import { parseSearchQuery } from "@/lib/parseSearchQuery";
-import { mockPeople } from "@/lib/mockPeople";
+import { motion } from "motion/react";
+import { Upload, ChevronLeft, LogOut } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase/client";
 import type { Tables } from "@/database.types";
 import { useMutation } from "@tanstack/react-query";
@@ -40,7 +24,7 @@ export default function UploadPage() {
     const [uploadedVideo, setUploadedVideo] = useState<File | null>(null);
     const [uploadedAd, setUploadedAd] = useState<Ad | null>(null);
     const [prompt, setPrompt] = useState(
-        "Simulate how 25 Gen Z tech enthusiasts react to this ad"
+        "Software Engineers and Adtech professionals in New York City"
     );
     const [isLoading, setIsLoading] = useState(false);
     const [uploadError, setUploadError] = useState<string | null>(null);
@@ -48,7 +32,7 @@ export default function UploadPage() {
     // Video analysis mutation
     const { mutate: analyzeVideo, isPending: analyzingVideo } = useMutation({
         mutationFn: async () => {
-            const response = await apiClient.POST("/{job_id}/video-dummy", {
+            const response = await apiClient.POST("/{job_id}/video", {
                 params: {
                     path: {
                         job_id: projectId as string,
@@ -66,13 +50,12 @@ export default function UploadPage() {
                 const fileName = `${Date.now()}-${video.name}`;
 
                 // Upload file to Supabase storage
-                const { data: uploadData, error: uploadError } =
-                    await supabase.storage
-                        .from("videos")
-                        .upload(fileName, video, {
-                            cacheControl: "3600",
-                            upsert: false,
-                        });
+                const { error: uploadError } = await supabase.storage
+                    .from("videos")
+                    .upload(fileName, video, {
+                        cacheControl: "3600",
+                        upsert: false,
+                    });
 
                 if (uploadError) {
                     throw new Error(`Upload failed: ${uploadError.message}`);
@@ -88,6 +71,8 @@ export default function UploadPage() {
                     .from("ads")
                     .insert({
                         video_url: publicUrl,
+                        description:
+                            "This video is a unprofessionally shot video of an asian man promoting a hackathon. It is not very well lit, but if you are a person who is into ad tech, or if you like hackathons in general, a general person might think this is unprofessional, maybe funny how unprofessional it is, but at least you're interested in going. If you don't like ads or hackathon, you'll wonder why you're being shown a piece of crap unprofessional video for ad tech hackathon.",
                     })
                     .select()
                     .single();
@@ -117,10 +102,15 @@ export default function UploadPage() {
     // Job update mutation
     const { mutateAsync: updateJob, isPending: updatingJob } = useMutation({
         mutationFn: async () => {
+            const defaultPrompt =
+                "Software Engineers and Adtech professionals in New York City";
+            const isDogWalker = prompt !== defaultPrompt;
+
             const jobData = await updateJobAction(
                 projectId as string,
                 prompt,
-                uploadedAd!.id
+                uploadedAd!.id,
+                isDogWalker
             );
             return jobData;
         },
@@ -392,7 +382,7 @@ export default function UploadPage() {
                         <Input
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
-                            placeholder="Simulate how 25 Gen Z tech enthusiasts react to this ad"
+                            placeholder="HELLO WORLD"
                             className="bg-transparent border-none text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/10"
                             onKeyPress={(e) => {
                                 if (
@@ -438,7 +428,7 @@ export default function UploadPage() {
                             <span className="relative z-10">
                                 {updatingJob
                                     ? "Starting Simulation..."
-                                    : "Run Simulation"}
+                                    : "Generate Personas"}
                             </span>
                         </Button>
                     </motion.div>

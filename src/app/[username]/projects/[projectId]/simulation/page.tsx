@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -8,13 +8,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { ChevronLeft, LogOut } from "lucide-react";
 import { CenteredVideoAnalysis } from "@/app/components/CenteredVideoAnalysis";
 import { TowaReactionModal } from "@/app/components/TowaReactionModal";
-import { PersonasPanel } from "@/app/components/PersonasPanel";
 import { SearchProgress } from "@/app/components/SearchProgress";
 import { ProfilesStream } from "@/app/components/ProfilesStream";
-import {
-    AnalysisReport,
-    ExpandedReport,
-} from "@/app/components/AnalysisReport";
+import { ExpandedReport } from "@/app/components/AnalysisReport";
 import { VideoAnalysisSidebar } from "@/app/components/VideoAnalysisSidebar";
 import {
     getPersonasByJobId,
@@ -65,7 +61,7 @@ export default function SimulationPage() {
     });
 
     // Fetch persona responses
-    const { data: personaResponses, isLoading: responsesLoading } = useQuery({
+    const { data: personaResponses } = useQuery({
         queryKey: ["personaResponses", projectId],
         queryFn: () => getPersonaResponses(projectId as string),
         enabled: !!projectId,
@@ -91,52 +87,55 @@ export default function SimulationPage() {
         }
     };
 
-    const startSimulation = async (people: Person[]) => {
-        setIsSimulating(true);
-        setShowSearchProgress(true);
-        setShowProfilesStream(false);
-        setShowAnalysisReport(false);
-        setProgress(0);
-        setFoundCount(people.length);
+    const startSimulation = useCallback(
+        async (people: Person[]) => {
+            setIsSimulating(true);
+            setShowSearchProgress(true);
+            setShowProfilesStream(false);
+            setShowAnalysisReport(false);
+            setProgress(0);
+            setFoundCount(people.length);
 
-        // Simulate search progress
-        const progressInterval = setInterval(() => {
-            setProgress((prev) => {
-                if (prev >= 95) {
-                    clearInterval(progressInterval);
-                    setTimeout(() => {
-                        setShowSearchProgress(false);
-                        setShowProfilesStream(true);
+            // Simulate search progress
+            const progressInterval = setInterval(() => {
+                setProgress((prev) => {
+                    if (prev >= 95) {
+                        clearInterval(progressInterval);
+                        setTimeout(() => {
+                            setShowSearchProgress(false);
+                            setShowProfilesStream(true);
 
-                        setTimeout(async () => {
-                            setShowProfilesStream(false);
+                            setTimeout(async () => {
+                                setShowProfilesStream(false);
 
-                            // Start AI analysis
-                            setIsAnalyzing(true);
-                            try {
-                                const analysis =
-                                    await generateAnalysisFromResponses(
-                                        projectId as string
+                                // Start AI analysis
+                                setIsAnalyzing(true);
+                                try {
+                                    const analysis =
+                                        await generateAnalysisFromResponses(
+                                            projectId as string
+                                        );
+                                    setAnalysisData(analysis);
+                                } catch (error) {
+                                    console.error(
+                                        "Error generating analysis:",
+                                        error
                                     );
-                                setAnalysisData(analysis);
-                            } catch (error) {
-                                console.error(
-                                    "Error generating analysis:",
-                                    error
-                                );
-                            } finally {
-                                setIsAnalyzing(false);
-                                setShowAnalysisReport(true);
-                                setIsSimulating(false);
-                            }
-                        }, 3000);
-                    }, 1000);
-                    return 100;
-                }
-                return prev + Math.random() * 8 + 2;
-            });
-        }, 300);
-    };
+                                } finally {
+                                    setIsAnalyzing(false);
+                                    setShowAnalysisReport(true);
+                                    setIsSimulating(false);
+                                }
+                            }, 3000);
+                        }, 1000);
+                        return 100;
+                    }
+                    return prev + Math.random() * 8 + 2;
+                });
+            }, 300);
+        },
+        [projectId]
+    );
 
     // Auto-start simulation if we have persona responses but no analysis yet
     useEffect(() => {
@@ -149,7 +148,14 @@ export default function SimulationPage() {
         ) {
             startSimulation(personas);
         }
-    }, [personaResponses]);
+    }, [
+        personaResponses,
+        analysisData,
+        isSimulating,
+        isAnalyzing,
+        personas,
+        startSimulation,
+    ]);
 
     if (isLoading) {
         return (
@@ -268,7 +274,6 @@ export default function SimulationPage() {
                         isOpen={showExpandedReport}
                         people={personas}
                         onClose={() => setShowExpandedReport(false)}
-                        analysisData={analysisData}
                     />
                 )}
             </AnimatePresence>
@@ -288,7 +293,7 @@ export default function SimulationPage() {
             <AnimatePresence>
                 {showFeedback && (
                     <FeedbackPanel
-                        people={personas}
+                        personaResponses={personaResponses || []}
                         onClose={() => setShowFeedback(false)}
                         analysisData={analysisData}
                     />

@@ -275,9 +275,9 @@ export function CenteredVideoAnalysis({
                             {/* Tags */}
                             <div className="flex flex-wrap gap-3 mb-6">
                                 {[
-                                    "Tech Product",
-                                    "Lifestyle Tone",
-                                    "Cinematic",
+                                    "Tech Event",
+                                    "Lifestyle Event",
+                                    "Casual",
                                 ].map((tag, index) => (
                                     <motion.div
                                         key={tag}

@@ -207,7 +207,7 @@ export function CenteredVideoAnalysis({
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: 0.3 }}
                                     >
-                                        iPhone 16 Launch
+                                        User video
                                     </motion.h2>
                                 </div>
 
@@ -282,7 +282,7 @@ export function CenteredVideoAnalysis({
                 >
                     {/* Tags */}
                     <div className="flex flex-wrap gap-3 mb-6">
-                        {["Tech Product", "Lifestyle Tone", "Cinematic"].map(
+                        {["Tech Event", "Lifestyle Event", "Casual"].map(
                             (tag, index) => (
                                 <motion.div
                                     key={tag}
@@ -311,21 +311,12 @@ export function CenteredVideoAnalysis({
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.9 }}
                     >
-                        A cinematic iPhone ad focusing on design and emotional
-                        connection.
+                        TRANSCRIPT: A video of a man telling viewers to come to
+                        a ad tech hackathon.
                     </motion.p>
 
                     {/* Emotion Timeline */}
                     <div>
-                        <motion.h4
-                            className="text-white/90 mb-4"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 1.0 }}
-                        >
-                            Emotion peaks over time
-                        </motion.h4>
-
                         <div
                             className="rounded-lg p-4"
                             style={{

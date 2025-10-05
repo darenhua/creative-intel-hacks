@@ -144,6 +144,7 @@ export default function DashboardPage() {
                         isRunning={false}
                         onRunSimulation={handleRunSimulation}
                         showInterest={isResponsesState}
+                        projectId={projectId as string}
                     />
                 </div>
 

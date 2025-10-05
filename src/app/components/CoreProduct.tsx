@@ -560,26 +560,7 @@ export function CoreProduct({ project, onBack, onLogout }: CoreProductProps) {
                                     </span>
                                 </div>
                                 <div className="text-xs space-y-1 text-white/70">
-                                    <div>
-                                        Progress:{" "}
-                                        {simulationPhase === "results"
-                                            ? 100
-                                            : Math.round(progress)}
-                                        %
-                                    </div>
-                                    <div className="bg-gray-700/50 h-1 rounded overflow-hidden">
-                                        <div
-                                            className="bg-green-400 h-full"
-                                            style={{
-                                                width: `${
-                                                    simulationPhase ===
-                                                    "results"
-                                                        ? 100
-                                                        : progress
-                                                }%`,
-                                            }}
-                                        ></div>
-                                    </div>
+                                    <div className="bg-gray-700/50 h-1 rounded overflow-hidden"></div>
                                     <div className="text-white/50">
                                         Status:{" "}
                                         {simulationPhase === "running"

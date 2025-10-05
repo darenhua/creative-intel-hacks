@@ -207,34 +207,34 @@ export function VideoAnalysisCard({
                     <div className="space-y-4">
                         {/* Tag Pills */}
                         <div className="flex flex-wrap gap-2">
-                            {[
-                                "Tech Product",
-                                "Lifestyle Tone",
-                                "Cinematic",
-                            ].map((tag, index) => (
-                                <motion.div
-                                    key={tag}
-                                    className="px-3 py-1 text-xs rounded-full text-white relative overflow-hidden group cursor-default"
-                                    style={{
-                                        background: "rgba(30, 41, 59, 0.3)",
-                                        border: "1px solid transparent",
-                                        backgroundImage:
-                                            "linear-gradient(rgba(30, 41, 59, 0.3), rgba(30, 41, 59, 0.3)), linear-gradient(135deg, #6EE7B7 0%, #2563EB 50%, #A855F7 100%)",
-                                        backgroundOrigin: "border-box",
-                                        backgroundClip:
-                                            "content-box, border-box",
-                                    }}
-                                    whileHover={{ scale: 1.05 }}
-                                    transition={{ duration: 0.2 }}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    whileInView={{
-                                        transition: { delay: index * 0.1 },
-                                    }}
-                                >
-                                    <span className="relative z-10">{tag}</span>
-                                </motion.div>
-                            ))}
+                            {["Tech Event", "Lifestyle Event", "Casual"].map(
+                                (tag, index) => (
+                                    <motion.div
+                                        key={tag}
+                                        className="px-3 py-1 text-xs rounded-full text-white relative overflow-hidden group cursor-default"
+                                        style={{
+                                            background: "rgba(30, 41, 59, 0.3)",
+                                            border: "1px solid transparent",
+                                            backgroundImage:
+                                                "linear-gradient(rgba(30, 41, 59, 0.3), rgba(30, 41, 59, 0.3)), linear-gradient(135deg, #6EE7B7 0%, #2563EB 50%, #A855F7 100%)",
+                                            backgroundOrigin: "border-box",
+                                            backgroundClip:
+                                                "content-box, border-box",
+                                        }}
+                                        whileHover={{ scale: 1.05 }}
+                                        transition={{ duration: 0.2 }}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        whileInView={{
+                                            transition: { delay: index * 0.1 },
+                                        }}
+                                    >
+                                        <span className="relative z-10">
+                                            {tag}
+                                        </span>
+                                    </motion.div>
+                                )
+                            )}
                         </div>
 
                         {/* Description */}

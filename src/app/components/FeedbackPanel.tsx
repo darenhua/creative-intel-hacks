@@ -1,31 +1,59 @@
-import { Card } from "./ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
 import { X } from "lucide-react";
-import type { Person } from "@/types/shared";
 import type { AnalysisData } from "@/app/actions/analysis";
 
+interface ConversationMessage {
+    role: string;
+    content: string;
+}
+
+interface PersonaResponse {
+    id: string;
+    job_id: string | null;
+    persona_id: string | null;
+    conversation: ConversationMessage[] | null;
+    created_at: string;
+    persona: {
+        id: string;
+        name: string | null;
+        location: string | null;
+        description: string | null;
+    } | null;
+}
+
 interface FeedbackPanelProps {
-    people: Person[];
+    personaResponses: PersonaResponse[];
     onClose: () => void;
     analysisData?: AnalysisData | null;
 }
 
-export function FeedbackPanel({ people, onClose, analysisData = null }: FeedbackPanelProps) {
-    const reactionCounts = people.reduce((acc, person) => {
-        acc[person.reaction] = (acc[person.reaction] || 0) + 1;
-        return acc;
-    }, {} as Record<string, number>);
+export function FeedbackPanel({
+    personaResponses,
+    onClose,
+    analysisData = null,
+}: FeedbackPanelProps) {
+    // Extract conversation data and create simplified stats
+    const conversations = personaResponses.map((response) => {
+        const conversation = response.conversation;
+        // Extract the user's response from the conversation
+        // Assuming conversation is an array of messages with role and content
+        const userMessage =
+            (conversation as any)?.response || "No response available";
 
-    const topIndustries = people.reduce((acc, person) => {
-        acc[person.industry] = (acc[person.industry] || 0) + 1;
-        return acc;
-    }, {} as Record<string, number>);
+        return {
+            id: response.id,
+            name: response.persona?.name || "Unknown",
+            location: response.persona?.location || "Unknown",
+            feedback: userMessage,
+            reaction: "interested", // Default since we don't have reaction data in responses
+        };
+    });
 
-    const generations = people.reduce((acc, person) => {
-        acc[person.generation] = (acc[person.generation] || 0) + 1;
-        return acc;
-    }, {} as Record<string, number>);
+    // Create mock stats for now since we don't have reaction/industry data in responses
+    const reactionCounts = { interested: conversations.length };
+    const topIndustries = { Technology: conversations.length };
+    const generations = { Millennial: conversations.length };
 
     // Reaction color mapping for clean professional look
     const getReactionColor = (reaction: string) => {
@@ -91,7 +119,7 @@ export function FeedbackPanel({ people, onClose, analysisData = null }: Feedback
                                 lineHeight: "1",
                             }}
                         >
-                            {people.length}
+                            {conversations.length}
                         </div>
                         <div
                             className="text-white/60"
@@ -115,7 +143,9 @@ export function FeedbackPanel({ people, onClose, analysisData = null }: Feedback
                                 lineHeight: "1",
                             }}
                         >
-                            {analysisData ? `${analysisData.sentiment.positive}%` : "94.2%"}
+                            {analysisData
+                                ? `${analysisData.sentiment.positive}%`
+                                : "94.2%"}
                         </div>
                         <div
                             className="text-white/60"
@@ -152,7 +182,7 @@ export function FeedbackPanel({ people, onClose, analysisData = null }: Feedback
                         {Object.entries(reactionCounts).map(
                             ([reaction, count]) => {
                                 const percentage = (
-                                    (count / people.length) *
+                                    (count / conversations.length) *
                                     100
                                 ).toFixed(1);
                                 const color = getReactionColor(reaction);
@@ -312,7 +342,7 @@ export function FeedbackPanel({ people, onClose, analysisData = null }: Feedback
                 {/* Separator */}
                 <div className="w-full h-px bg-gray-800 mb-8"></div>
 
-                {/* Key Insights */}
+                {/* User Responses */}
                 <div className="mb-10">
                     <h3
                         className="text-white/90 mb-4"
@@ -323,38 +353,68 @@ export function FeedbackPanel({ people, onClose, analysisData = null }: Feedback
                             letterSpacing: "0.05em",
                         }}
                     >
-                        Key Insights
+                        User Responses
                     </h3>
 
-                    <div
-                        className="p-4 rounded-sm"
-                        style={{
-                            background: "rgba(255, 255, 255, 0.02)",
-                            border: "1px solid #1C1C1C",
-                        }}
-                    >
-                        <ul className="space-y-3">
-                            {(analysisData?.highlights || [
-                                "Gen X shows highest engagement (67%)",
-                                "Fintech professionals most receptive",
-                                "Urban demographics prefer innovation",
-                                "25-49 age group drives sentiment"
-                            ]).map((insight, index) => (
-                                <li
-                                    key={index}
-                                    className="flex items-start gap-3 text-white/70"
+                    <div className="space-y-3">
+                        {conversations.map((conversation, index) => (
+                            <motion.div
+                                key={conversation.id}
+                                initial={{ opacity: 0, y: 5 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.05 }}
+                                className="p-3 rounded-sm"
+                                style={{
+                                    background: "rgba(255, 255, 255, 0.02)",
+                                    border: "1px solid #1C1C1C",
+                                }}
+                            >
+                                <div className="flex items-start gap-3 mb-2">
+                                    <div
+                                        className="w-8 h-8 rounded-full flex-shrink-0"
+                                        style={{
+                                            background: `linear-gradient(135deg, #6EE7B7, #2563EB)`,
+                                        }}
+                                    />
+                                    <div className="flex-1 min-w-0">
+                                        <h4
+                                            className="text-white mb-0.5"
+                                            style={{
+                                                fontFamily:
+                                                    "Inter, system-ui, sans-serif",
+                                                fontSize: "13px",
+                                                fontWeight: "500",
+                                            }}
+                                        >
+                                            {conversation.name}
+                                        </h4>
+                                        <p
+                                            className="text-white/50"
+                                            style={{
+                                                fontFamily:
+                                                    "Inter, system-ui, sans-serif",
+                                                fontSize: "11px",
+                                                fontWeight: "400",
+                                            }}
+                                        >
+                                            {conversation.location}
+                                        </p>
+                                    </div>
+                                </div>
+                                <p
+                                    className="text-white/70"
                                     style={{
-                                        fontFamily: "Inter, system-ui, sans-serif",
+                                        fontFamily:
+                                            "Inter, system-ui, sans-serif",
                                         fontSize: "12px",
                                         fontWeight: "400",
                                         lineHeight: "1.4",
                                     }}
                                 >
-                                    <span className="text-white/40 mt-1">•</span>
-                                    {insight}
-                                </li>
-                            ))}
-                        </ul>
+                                    {conversation.feedback}
+                                </p>
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
 

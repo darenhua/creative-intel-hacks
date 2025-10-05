@@ -456,6 +456,7 @@ export function CoreProduct({ project, onBack, onLogout }: CoreProductProps) {
                                     isRunning={isSimulating}
                                     onRunSimulation={handleSimulate}
                                     people={filteredPeople}
+                                    projectId={project.id}
                                 />
                             </motion.div>
                         ) : isSimulating || showAnalysisReport ? (
@@ -495,12 +496,6 @@ export function CoreProduct({ project, onBack, onLogout }: CoreProductProps) {
                             </div>
                             <div className="text-xs space-y-1 text-white/70">
                                 <div>Progress: {Math.round(progress)}%</div>
-                                <div className="bg-gray-700/50 h-1 rounded overflow-hidden">
-                                    <div
-                                        className="bg-green-400 h-full"
-                                        style={{ width: `${progress}%` }}
-                                    ></div>
-                                </div>
                                 <div className="text-white/50">
                                     Status: CRITICAL
                                 </div>

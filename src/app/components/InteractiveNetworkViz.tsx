@@ -15,6 +15,7 @@ interface InteractiveNetworkVizProps {
     onRunSimulation?: () => void;
     people?: Person[];
     showInterest?: boolean;
+    projectId?: string;
 }
 
 const generatePersonas = (): PersonaNode[] => {
@@ -195,6 +196,7 @@ export function InteractiveNetworkViz({
     onRunSimulation,
     people,
     showInterest = false,
+    projectId,
 }: InteractiveNetworkVizProps) {
     // Note: isRunning prop is available for future use
     // Use the people prop if provided, otherwise generate personas
@@ -549,7 +551,8 @@ export function InteractiveNetworkViz({
                                             />
                                         </div>
                                         <span className="text-xs text-white/80">
-                                            {Math.round(hoveredNode.engagement)}%
+                                            {Math.round(hoveredNode.engagement)}
+                                            %
                                         </span>
                                     </div>
                                 </div>
@@ -570,6 +573,7 @@ export function InteractiveNetworkViz({
                         person={selectedNode}
                         onClose={handleClosePersonaPanel}
                         onAddToFeedback={handleAddToFeedback}
+                        projectId={projectId || ""}
                     />
                 )}
             </AnimatePresence>

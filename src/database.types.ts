@@ -41,18 +41,21 @@ export type Database = {
                     created_at: string;
                     demographic: string | null;
                     id: string;
+                    is_dog_walker: boolean | null;
                 };
                 Insert: {
                     ads_id?: string | null;
                     created_at?: string;
                     demographic?: string | null;
                     id?: string;
+                    is_dog_walker?: boolean | null;
                 };
                 Update: {
                     ads_id?: string | null;
                     created_at?: string;
                     demographic?: string | null;
                     id?: string;
+                    is_dog_walker?: boolean | null;
                 };
                 Relationships: [
                     {

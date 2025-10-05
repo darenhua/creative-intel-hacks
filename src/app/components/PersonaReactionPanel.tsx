@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import {
     Dialog,
     DialogContent,
@@ -7,15 +7,17 @@ import {
     DialogTitle,
     DialogDescription,
 } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { X, Mic, PhoneOff, Plus, MessageSquare, Phone } from "lucide-react";
+import { X, Phone } from "lucide-react";
 import type { Person } from "@/types/shared";
+import { createBrowserClient } from "@/lib/supabase/client";
+import apiClient from "@/lib/api-client";
 
 interface PersonaReactionPanelProps {
     person: Person;
     onClose: () => void;
     onAddToFeedback?: (person: Person) => void;
+    projectId: string;
 }
 
 const getReactionColor = (reaction: string) => {
@@ -60,31 +62,45 @@ export function PersonaReactionPanel({
     person,
     onClose,
     onAddToFeedback,
+    projectId,
 }: PersonaReactionPanelProps) {
     const [isRecording, setIsRecording] = useState(false);
     const [isCallActive, setIsCallActive] = useState(false);
     const reactionStyle = getReactionColor(person.reaction);
 
-    const handleStartCall = () => {
-        setIsCallActive(true);
-        setIsRecording(false);
-    };
-
-    const handleEndCall = () => {
-        setIsCallActive(false);
-        setIsRecording(false);
-    };
-
-    const handleToggleRecord = () => {
-        if (!isCallActive) {
+    const handleStartCall = async () => {
+        try {
             setIsCallActive(true);
-        }
-        setIsRecording(!isRecording);
-    };
+            setIsRecording(false);
 
-    const handleAddToFeedback = () => {
-        onAddToFeedback?.(person);
-        onClose();
+            // Get Supabase client
+            const supabase = createBrowserClient();
+
+            // Fetch job data to check is_dog_walker
+            const { data: job, error } = await supabase
+                .from("jobs")
+                .select("is_dog_walker")
+                .eq("id", projectId)
+                .single();
+
+            if (error) {
+                console.error("Error fetching job data:", error);
+                return;
+            }
+
+            // Make API call based on is_dog_walker value
+            const endpoint = job.is_dog_walker
+                ? "/vapi/calls/female"
+                : "/vapi/calls/male";
+
+            const response = await apiClient.POST(endpoint, {});
+
+            if (response.data) {
+                console.log("Call initiated successfully:", response.data);
+            }
+        } catch (error) {
+            console.error("Error starting call:", error);
+        }
     };
 
     return (
@@ -172,13 +188,8 @@ export function PersonaReactionPanel({
                         >
                             <div className="flex items-center gap-3">
                                 <h3 className="text-sm text-cyan-300 tracking-wide">
-                                    REACTION SUMMARY
+                                    OVERVIEW
                                 </h3>
-                                <Badge
-                                    className={`px-3 py-1 text-xs border ${reactionStyle.border} ${reactionStyle.text} bg-gradient-to-r ${reactionStyle.bg}`}
-                                >
-                                    {reactionStyle.label}
-                                </Badge>
                             </div>
 
                             {/* Reaction Paragraphs */}
@@ -186,27 +197,7 @@ export function PersonaReactionPanel({
                                 <p className="text-white/80">
                                     {person.fullReaction}
                                 </p>
-                                <p className="text-white/70">
-                                    This persona shows {person.reaction}{" "}
-                                    engagement with the content, particularly
-                                    responding to elements that align with their{" "}
-                                    {person.generation}
-                                    perspective and {person.industry}{" "}
-                                    background.
-                                </p>
                             </div>
-
-                            {/* User Quote */}
-                            <motion.div
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.4 }}
-                                className="relative pl-4 border-l-2 border-cyan-400/40"
-                            >
-                                <p className="text-white/90 italic text-sm">
-                                    "{person.feedback}"
-                                </p>
-                            </motion.div>
                         </motion.div>
 
                         {/* Live Interaction */}
@@ -266,57 +257,13 @@ export function PersonaReactionPanel({
                                             Connect
                                         </Button>
                                     ) : (
-                                        <>
-                                            <Button
-                                                onClick={handleToggleRecord}
-                                                size="sm"
-                                                className={`text-xs px-3 py-1 h-7 ${
-                                                    isRecording
-                                                        ? "bg-red-600/80 hover:bg-red-600 text-white"
-                                                        : "bg-blue-600/80 hover:bg-blue-600 text-white"
-                                                }`}
-                                            >
-                                                <Mic className="w-3 h-3 mr-1" />
-                                                {isRecording
-                                                    ? "Stop"
-                                                    : "Record"}
-                                            </Button>
-                                            <Button
-                                                onClick={handleEndCall}
-                                                size="sm"
-                                                variant="outline"
-                                                className="text-xs px-3 py-1 h-7 border-white/20 text-white/70 hover:text-white hover:border-white/40"
-                                            >
-                                                <PhoneOff className="w-3 h-3 mr-1" />
-                                                End
-                                            </Button>
-                                        </>
+                                        <div className="text-xs text-white/60">
+                                            {person.name} will call you
+                                            shortly...
+                                        </div>
                                     )}
                                 </div>
                             </div>
-                        </motion.div>
-
-                        {/* Footer Actions */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4 }}
-                            className="flex gap-3 pt-2"
-                        >
-                            <Button
-                                onClick={handleAddToFeedback}
-                                className="flex-1 bg-gradient-to-r from-cyan-600/80 to-blue-600/80 hover:from-cyan-600 hover:to-blue-600 text-white text-sm py-2 transition-all duration-300"
-                            >
-                                <Plus className="w-4 h-4 mr-2" />
-                                Add to Feedback Summary
-                            </Button>
-                            <Button
-                                onClick={onClose}
-                                variant="outline"
-                                className="px-6 border-white/20 text-white/70 hover:text-white hover:border-white/40 text-sm py-2 transition-all duration-300"
-                            >
-                                Close Persona Card
-                            </Button>
                         </motion.div>
                     </div>
                 </motion.div>
