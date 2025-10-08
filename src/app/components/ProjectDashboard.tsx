@@ -130,37 +130,6 @@ export function ProjectDashboard({
                                     >
                                         {/* Content */}
                                         <div className="space-y-4">
-                                            {/* Tags */}
-                                            <div className="flex items-center gap-2 flex-wrap">
-                                                <Badge
-                                                    className="text-[10px] px-2 py-1 bg-[#000000] border text-[#E5E5E5] font-mono uppercase tracking-wider hover:bg-[#E5E5E5] hover:text-[#000000] transition-all duration-200"
-                                                    style={{
-                                                        borderColor: "#E5E5E5",
-                                                        borderRadius: "0px",
-                                                    }}
-                                                >
-                                                    SIMULATION
-                                                </Badge>
-                                                <Badge
-                                                    className="text-[10px] px-2 py-1 bg-[#000000] border text-[#E5E5E5] font-mono uppercase tracking-wider hover:bg-[#E5E5E5] hover:text-[#000000] transition-all duration-200"
-                                                    style={{
-                                                        borderColor: "#E5E5E5",
-                                                        borderRadius: "0px",
-                                                    }}
-                                                >
-                                                    AI-POWERED
-                                                </Badge>
-                                                <Badge
-                                                    className="text-[10px] px-2 py-1 bg-[#000000] border text-[#E5E5E5] font-mono uppercase tracking-wider hover:bg-[#E5E5E5] hover:text-[#000000] transition-all duration-200"
-                                                    style={{
-                                                        borderColor: "#E5E5E5",
-                                                        borderRadius: "0px",
-                                                    }}
-                                                >
-                                                    {project.phase}
-                                                </Badge>
-                                            </div>
-
                                             {/* Date */}
                                             <div className="text-[11px] text-[#666666] font-mono">
                                                 ⊙{" "}
@@ -174,7 +143,7 @@ export function ProjectDashboard({
                                             </div>
 
                                             {/* Project Title */}
-                                            <h3 className="text-[16px] font-medium text-[#E5E5E5] leading-tight font-mono">
+                                            <h3 className="text-[16px] font-medium text-[#E5E5E5] leading-tight font-mono h-12">
                                                 {project.title}
                                             </h3>
 
@@ -224,11 +193,6 @@ export function ProjectDashboard({
                                                         ]
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            {/* Stats */}
-                                            <div className="text-[11px] text-[#666666] font-mono">
-                                                ∞ 8 simulations
                                             </div>
 
                                             {/* Open Project Button */}

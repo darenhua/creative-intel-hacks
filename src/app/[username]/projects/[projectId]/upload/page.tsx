@@ -355,7 +355,7 @@ export default function UploadPage() {
 
                     {/* Error Message */}
                     {uploadError && (
-                        <div className="mb-4 p-4 rounded-lg bg-red-500/10 border border-red-400/20">
+                        <div className="mb-4 p-4 rounded-sm bg-red-500/10 border border-red-400/20">
                             <p className="text-sm text-red-400">
                                 {uploadError}
                             </p>

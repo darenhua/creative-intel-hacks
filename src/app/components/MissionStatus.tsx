@@ -115,7 +115,7 @@ export function MissionStatus({
 
                             {/* Glassmorphic Card Container */}
                             <div
-                                className="relative rounded-lg p-5 backdrop-blur-sm border border-blue-400/20 max-h-96 overflow-y-auto"
+                                className="relative rounded-sm backdrop-blur-sm border border-blue-400/20 max-h-96 overflow-y-auto"
                                 style={{
                                     background:
                                         "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",

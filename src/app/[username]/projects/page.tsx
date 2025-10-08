@@ -37,7 +37,7 @@ export default function Page() {
                     date: new Date(job.created_at).toISOString().split("T")[0],
                     progress: 0,
                     phase: "Phase 1",
-                    description: "You are on track to reach engagement goals.",
+                    description: "Ad Campaign Launch",
                 })) || [];
 
             setProjects(mappedProjects);
@@ -48,7 +48,12 @@ export default function Page() {
     }, [supabase]);
 
     const handleProjectSelect = (project: Project) => {
-        router.push(`/${username}/projects/${project.id}/upload`);
+        // If project has a title (not "Untitled Project"), go to dashboard
+        if (project.title && project.title !== "Untitled Project") {
+            router.push(`/${username}/projects/${project.id}/dashboard`);
+        } else {
+            router.push(`/${username}/projects/${project.id}/upload`);
+        }
     };
 
     const handleNewProject = async () => {

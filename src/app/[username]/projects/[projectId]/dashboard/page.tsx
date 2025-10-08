@@ -124,15 +124,6 @@ export default function DashboardPage() {
                             </p>
                         </div>
                     </div>
-
-                    <Button
-                        onClick={() => router.push("/")}
-                        variant="ghost"
-                        size="sm"
-                        className="text-white hover:bg-gray-800 hover:text-red-400 transition-colors"
-                    >
-                        <LogOut className="w-4 h-4" />
-                    </Button>
                 </div>
             </div>
 
@@ -143,7 +134,7 @@ export default function DashboardPage() {
                         people={personas}
                         isRunning={false}
                         onRunSimulation={handleRunSimulation}
-                        showInterest={isResponsesState}
+                        showInterest={false}
                         projectId={projectId as string}
                     />
                 </div>
