@@ -1,4 +1,3 @@
-import { Card } from "./ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
 import { X } from "lucide-react";
@@ -135,14 +134,15 @@ export function PersonasPanel({ people, onClose }: PersonasPanelProps) {
                                     <div
                                         className="w-10 h-10 rounded-full flex-shrink-0"
                                         style={{
-                                            background: `linear-gradient(135deg, ${person.color || "#6EE7B7"}, ${person.color || "#2563EB"})`,
+                                            background: "linear-gradient(135deg, #6EE7B7, #2563EB)",
                                         }}
                                     />
                                     <div className="flex-1 min-w-0">
                                         <h4
                                             className="text-white mb-1"
                                             style={{
-                                                fontFamily: "Inter, system-ui, sans-serif",
+                                                fontFamily:
+                                                    "Inter, system-ui, sans-serif",
                                                 fontSize: "14px",
                                                 fontWeight: "500",
                                             }}
@@ -152,7 +152,8 @@ export function PersonasPanel({ people, onClose }: PersonasPanelProps) {
                                         <p
                                             className="text-white/60"
                                             style={{
-                                                fontFamily: "Inter, system-ui, sans-serif",
+                                                fontFamily:
+                                                    "Inter, system-ui, sans-serif",
                                                 fontSize: "12px",
                                                 fontWeight: "400",
                                             }}
@@ -167,7 +168,8 @@ export function PersonasPanel({ people, onClose }: PersonasPanelProps) {
                                         <span
                                             className="text-white/50"
                                             style={{
-                                                fontFamily: "Inter, system-ui, sans-serif",
+                                                fontFamily:
+                                                    "Inter, system-ui, sans-serif",
                                                 fontSize: "11px",
                                                 fontWeight: "400",
                                             }}
@@ -177,7 +179,8 @@ export function PersonasPanel({ people, onClose }: PersonasPanelProps) {
                                         <span
                                             className="text-white/80"
                                             style={{
-                                                fontFamily: "Inter, system-ui, sans-serif",
+                                                fontFamily:
+                                                    "Inter, system-ui, sans-serif",
                                                 fontSize: "12px",
                                                 fontWeight: "400",
                                             }}
@@ -189,7 +192,8 @@ export function PersonasPanel({ people, onClose }: PersonasPanelProps) {
                                         <span
                                             className="text-white/50"
                                             style={{
-                                                fontFamily: "Inter, system-ui, sans-serif",
+                                                fontFamily:
+                                                    "Inter, system-ui, sans-serif",
                                                 fontSize: "11px",
                                                 fontWeight: "400",
                                             }}
@@ -199,7 +203,8 @@ export function PersonasPanel({ people, onClose }: PersonasPanelProps) {
                                         <span
                                             className="text-white/80"
                                             style={{
-                                                fontFamily: "Inter, system-ui, sans-serif",
+                                                fontFamily:
+                                                    "Inter, system-ui, sans-serif",
                                                 fontSize: "12px",
                                                 fontWeight: "400",
                                             }}
@@ -207,30 +212,6 @@ export function PersonasPanel({ people, onClose }: PersonasPanelProps) {
                                             {person.location}
                                         </span>
                                     </div>
-                                    {person.interests && person.interests.length > 0 && (
-                                        <div className="flex items-start justify-between">
-                                            <span
-                                                className="text-white/50"
-                                                style={{
-                                                    fontFamily: "Inter, system-ui, sans-serif",
-                                                    fontSize: "11px",
-                                                    fontWeight: "400",
-                                                }}
-                                            >
-                                                Interests
-                                            </span>
-                                            <span
-                                                className="text-white/80 text-right"
-                                                style={{
-                                                    fontFamily: "Inter, system-ui, sans-serif",
-                                                    fontSize: "12px",
-                                                    fontWeight: "400",
-                                                }}
-                                            >
-                                                {person.interests.slice(0, 2).join(", ")}
-                                            </span>
-                                        </div>
-                                    )}
                                 </div>
                             </motion.div>
                         ))}

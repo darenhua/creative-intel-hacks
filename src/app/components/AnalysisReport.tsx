@@ -12,7 +12,7 @@ import {
     TrendingUp,
     X,
 } from "lucide-react";
-import type { Person } from "../App";
+import type { Person } from "@/types/shared";
 
 interface AnalysisReportProps {
     isVisible: boolean;
