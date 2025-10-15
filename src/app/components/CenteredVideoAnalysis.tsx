@@ -90,9 +90,9 @@ export function CenteredVideoAnalysis({
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen px-8 py-12 relative">
+        <div className="flex flex-col items-center justify-center px-8 py-12 relative  overflow-hidden">
             {/* Orbit Ring Background */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
                 <motion.div
                     className="w-[800px] h-[800px] border border-white/5 rounded-full"
                     animate={{ rotate: 360 }}
@@ -262,117 +262,6 @@ export function CenteredVideoAnalysis({
                         )}
                     </AnimatePresence>
                 </div>
-
-                {/* Analysis Section */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6, duration: 0.5 }}
-                    className="rounded-2xl p-8 mb-8"
-                    style={{
-                        background: "rgba(11, 17, 32, 0.4)",
-                        backdropFilter: "blur(20px)",
-                        border: "1px solid rgba(110, 231, 183, 0.2)",
-                        boxShadow: `
-              0 0 40px rgba(110, 231, 183, 0.1),
-              0 0 80px rgba(37, 99, 235, 0.05)
-            `,
-                    }}
-                >
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-3 mb-6">
-                        {["Tech Event", "Lifestyle Event", "Casual"].map(
-                            (tag, index) => (
-                                <motion.div
-                                    key={tag}
-                                    className="px-4 py-2 text-sm rounded-full text-white/80 relative overflow-hidden"
-                                    style={{
-                                        background: "rgba(30, 41, 59, 0.5)",
-                                        border: "1px solid rgba(255, 255, 255, 0.1)",
-                                        backdropFilter: "blur(10px)",
-                                    }}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{
-                                        delay: 0.7 + index * 0.1,
-                                    }}
-                                >
-                                    {tag}
-                                </motion.div>
-                            ),
-                        )}
-                    </div>
-
-                    {/* AI Summary */}
-                    <motion.p
-                        className="text-white/80 leading-relaxed mb-8"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.9 }}
-                    >
-                        TRANSCRIPT: A video of a man telling viewers to come to
-                        a ad tech hackathon.
-                    </motion.p>
-
-                    {/* Emotion Timeline */}
-                    <div>
-                        <div
-                            className="rounded-lg p-4"
-                            style={{
-                                background: "rgba(30, 41, 59, 0.2)",
-                                border: "1px solid rgba(110, 231, 183, 0.1)",
-                            }}
-                        >
-                            <div className="flex items-end justify-between h-20 gap-2">
-                                {Array.from({ length: 20 }, (_, i) => (
-                                    <motion.div
-                                        key={i}
-                                        className="flex-1 rounded-t-sm relative overflow-hidden"
-                                        style={{
-                                            height: `${
-                                                25 +
-                                                Math.sin(i * 0.6) * 35 +
-                                                Math.random() * 15
-                                            }%`,
-                                            background:
-                                                "linear-gradient(to top, rgba(37, 99, 235, 0.6), rgba(110, 231, 183, 0.8))",
-                                        }}
-                                        initial={{
-                                            height: 0,
-                                            opacity: 0,
-                                        }}
-                                        animate={{
-                                            height: `${
-                                                25 +
-                                                Math.sin(i * 0.6) * 35 +
-                                                Math.random() * 15
-                                            }%`,
-                                            opacity: 1,
-                                        }}
-                                        transition={{
-                                            delay: 1.1 + i * 0.03,
-                                            duration: 0.4,
-                                        }}
-                                    >
-                                        {/* Shimmer effect */}
-                                        <motion.div
-                                            className="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-transparent"
-                                            animate={{
-                                                y: ["-100%", "100%"],
-                                            }}
-                                            transition={{
-                                                duration: 2.5,
-                                                repeat: Infinity,
-                                                delay: Math.random() * 2,
-                                                ease: "easeInOut",
-                                            }}
-                                        />
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </motion.div>
             </motion.div>
         </div>
     );

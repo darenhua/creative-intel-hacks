@@ -35,8 +35,6 @@ export default function SimulationPage() {
     const [isSimulating, setIsSimulating] = useState(false);
     const [progress, setProgress] = useState(0);
     const [foundCount, setFoundCount] = useState(0);
-    const [showSearchProgress, setShowSearchProgress] = useState(false);
-    const [showProfilesStream, setShowProfilesStream] = useState(false);
     const [showAnalysisReport, setShowAnalysisReport] = useState(false);
     const [showExpandedReport, setShowExpandedReport] = useState(false);
 
@@ -90,8 +88,6 @@ export default function SimulationPage() {
     const startSimulation = useCallback(
         async (people: Person[]) => {
             setIsSimulating(true);
-            setShowSearchProgress(true);
-            setShowProfilesStream(false);
             setShowAnalysisReport(false);
             setProgress(0);
             setFoundCount(people.length);
@@ -102,12 +98,7 @@ export default function SimulationPage() {
                     if (prev >= 95) {
                         clearInterval(progressInterval);
                         setTimeout(() => {
-                            setShowSearchProgress(false);
-                            setShowProfilesStream(true);
-
                             setTimeout(async () => {
-                                setShowProfilesStream(false);
-
                                 // Start AI analysis
                                 setIsAnalyzing(true);
                                 try {
@@ -148,14 +139,7 @@ export default function SimulationPage() {
         ) {
             startSimulation(personas);
         }
-    }, [
-        personaResponses,
-        analysisData,
-        isSimulating,
-        isAnalyzing,
-        personas,
-        startSimulation,
-    ]);
+    }, [personaResponses, analysisData, isSimulating, isAnalyzing, personas]);
 
     if (isLoading) {
         return (
@@ -225,29 +209,6 @@ export default function SimulationPage() {
                 />
             </div>
 
-            {/* Modals */}
-            <AnimatePresence>
-                {showSearchProgress && (
-                    <SearchProgress
-                        progress={progress}
-                        foundCount={foundCount}
-                        searchQuery={job?.demographic || ""}
-                    />
-                )}
-            </AnimatePresence>
-
-            <AnimatePresence>
-                {showProfilesStream && (
-                    <ProfilesStream
-                        people={personas}
-                        onComplete={() => {
-                            setShowProfilesStream(false);
-                            setShowAnalysisReport(true);
-                        }}
-                    />
-                )}
-            </AnimatePresence>
-
             <AnimatePresence>
                 {showExpandedReport && (
                     <ExpandedReport
@@ -258,27 +219,11 @@ export default function SimulationPage() {
                 )}
             </AnimatePresence>
 
-            <AnimatePresence>
-                {selectedPerson && (
-                    <TowaReactionModal
-                        person={selectedPerson}
-                        onClose={() => setSelectedPerson(null)}
-                        onAddToFeedback={(person) => {
-                            console.log("Adding to feedback:", person.name);
-                        }}
-                    />
-                )}
-            </AnimatePresence>
-
-            <AnimatePresence>
-                {showFeedback && (
-                    <FeedbackPanel
-                        personaResponses={personaResponses || []}
-                        onClose={() => setShowFeedback(false)}
-                        analysisData={analysisData}
-                    />
-                )}
-            </AnimatePresence>
+            {/*<FeedbackPanel
+                personaResponses={personaResponses || []}
+                onClose={() => setShowFeedback(false)}
+                analysisData={analysisData}
+            />*/}
         </div>
     );
 }

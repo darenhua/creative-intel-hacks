@@ -231,7 +231,7 @@ export function FeedbackPanel({
                                         </div>
                                     </div>
                                 );
-                            }
+                            },
                         )}
                     </div>
                 </div>
@@ -334,120 +334,13 @@ export function FeedbackPanel({
                                         {count}
                                     </span>
                                 </div>
-                            )
+                            ),
                         )}
                     </div>
                 </div>
 
                 {/* Separator */}
                 <div className="w-full h-px bg-gray-800 mb-8"></div>
-
-                {/* User Responses */}
-                <div className="mb-10">
-                    <h3
-                        className="text-white/90 mb-4"
-                        style={{
-                            fontFamily: "Inter, system-ui, sans-serif",
-                            fontSize: "14px",
-                            fontWeight: "500",
-                            letterSpacing: "0.05em",
-                        }}
-                    >
-                        User Responses
-                    </h3>
-
-                    <div className="space-y-3">
-                        {conversations.map((conversation, index) => (
-                            <motion.div
-                                key={conversation.id}
-                                initial={{ opacity: 0, y: 5 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.05 }}
-                                className="p-3 rounded-sm"
-                                style={{
-                                    background: "rgba(255, 255, 255, 0.02)",
-                                    border: "1px solid #1C1C1C",
-                                }}
-                            >
-                                <div className="flex items-start gap-3 mb-2">
-                                    <div
-                                        className="w-8 h-8 rounded-full flex-shrink-0"
-                                        style={{
-                                            background: `linear-gradient(135deg, #6EE7B7, #2563EB)`,
-                                        }}
-                                    />
-                                    <div className="flex-1 min-w-0">
-                                        <h4
-                                            className="text-white mb-0.5"
-                                            style={{
-                                                fontFamily:
-                                                    "Inter, system-ui, sans-serif",
-                                                fontSize: "13px",
-                                                fontWeight: "500",
-                                            }}
-                                        >
-                                            {conversation.name}
-                                        </h4>
-                                        <p
-                                            className="text-white/50"
-                                            style={{
-                                                fontFamily:
-                                                    "Inter, system-ui, sans-serif",
-                                                fontSize: "11px",
-                                                fontWeight: "400",
-                                            }}
-                                        >
-                                            {conversation.location}
-                                        </p>
-                                    </div>
-                                </div>
-                                <p
-                                    className="text-white/70"
-                                    style={{
-                                        fontFamily:
-                                            "Inter, system-ui, sans-serif",
-                                        fontSize: "12px",
-                                        fontWeight: "400",
-                                        lineHeight: "1.4",
-                                    }}
-                                >
-                                    {conversation.feedback}
-                                </p>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Export Options */}
-                <div className="space-y-3">
-                    <Button
-                        className="w-full text-white border border-white/20 hover:bg-white/5 hover:border-white/30 transition-all duration-200"
-                        style={{
-                            background: "#1A1A1A",
-                            fontFamily: "Inter, system-ui, sans-serif",
-                            fontSize: "13px",
-                            fontWeight: "500",
-                            height: "40px",
-                            letterSpacing: "0.02em",
-                        }}
-                    >
-                        Export Full Report
-                    </Button>
-                    <Button
-                        variant="outline"
-                        className="w-full border-white/10 text-white/70 hover:bg-white/5 hover:border-white/20 hover:text-white transition-all duration-200"
-                        style={{
-                            fontFamily: "Inter, system-ui, sans-serif",
-                            fontSize: "13px",
-                            fontWeight: "500",
-                            height: "40px",
-                            letterSpacing: "0.02em",
-                            background: "transparent",
-                        }}
-                    >
-                        Save to Project
-                    </Button>
-                </div>
             </div>
         </motion.div>
     );
