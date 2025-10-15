@@ -11,9 +11,6 @@ interface PersonasPanelProps {
 export function PersonasPanel({ people, onClose }: PersonasPanelProps) {
     return (
         <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.3 }}
             className="fixed right-0 top-0 h-full w-96 text-white z-50 overflow-y-auto"
             style={{
@@ -43,9 +40,7 @@ export function PersonasPanel({ people, onClose }: PersonasPanelProps) {
                         onClick={onClose}
                         className="text-white/50 hover:text-white hover:bg-white/5 border-0 transition-colors duration-200"
                         style={{ width: "32px", height: "32px" }}
-                    >
-                        <X className="w-4 h-4" />
-                    </Button>
+                    ></Button>
                 </div>
 
                 {/* Stats Row */}
@@ -134,7 +129,8 @@ export function PersonasPanel({ people, onClose }: PersonasPanelProps) {
                                     <div
                                         className="w-10 h-10 rounded-full flex-shrink-0"
                                         style={{
-                                            background: "linear-gradient(135deg, #6EE7B7, #2563EB)",
+                                            background:
+                                                "linear-gradient(135deg, #6EE7B7, #2563EB)",
                                         }}
                                     />
                                     <div className="flex-1 min-w-0">

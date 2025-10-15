@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "motion/react";
-import { ChevronLeft, LogOut, Play } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { InteractiveNetworkViz } from "@/app/components/InteractiveNetworkViz";
 import { TowaReactionModal } from "@/app/components/TowaReactionModal";
 import { PersonasPanel } from "@/app/components/PersonasPanel";
@@ -127,10 +127,11 @@ export default function DashboardPage() {
                 </div>
             </div>
 
-            <div className="flex h-[calc(100vh-73px)] relative">
+            <div className="flex h-[calc(100vh-73px)] relative mr-[395px]">
                 {/* Main Area - Interactive Network Visualization */}
                 <div className="flex-1 relative">
                     <InteractiveNetworkViz
+                        creatingResponses={creatingResponses}
                         people={personas}
                         isRunning={false}
                         onRunSimulation={handleRunSimulation}
@@ -138,54 +139,7 @@ export default function DashboardPage() {
                         projectId={projectId as string}
                     />
                 </div>
-
-                {/* Right Sidebar */}
-                <MissionStatus
-                    filteredPeople={personas}
-                    onViewFeedback={() => setShowFeedback(true)}
-                    personaResponses={personaResponses}
-                    isResponsesState={isResponsesState}
-                />
             </div>
-
-            {/* Fixed Run Simulation Button */}
-            <motion.div
-                className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-            >
-                <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                >
-                    <Button
-                        onClick={handleRunSimulation}
-                        disabled={personas.length === 0 || creatingResponses}
-                        className="px-8 py-4 text-white border-2 border-transparent relative overflow-hidden group text-lg shadow-2xl"
-                        style={{
-                            background:
-                                "linear-gradient(135deg, #6EE7B7, #2563EB, #A855F7)",
-                            borderRadius: "12px",
-                        }}
-                    >
-                        <div
-                            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                            style={{
-                                background:
-                                    "linear-gradient(135deg, rgba(110, 231, 183, 0.3), rgba(37, 99, 235, 0.3), rgba(168, 85, 247, 0.3))",
-                                filter: "blur(4px)",
-                            }}
-                        />
-                        <span className="relative z-10 flex items-center gap-2">
-                            <Play className="w-5 h-5" />
-                            {creatingResponses
-                                ? "Generating Responses..."
-                                : "Run Simulation"}
-                        </span>
-                    </Button>
-                </motion.div>
-            </motion.div>
 
             {/* Modals */}
             <AnimatePresence>
@@ -200,14 +154,10 @@ export default function DashboardPage() {
                 )}
             </AnimatePresence>
 
-            <AnimatePresence>
-                {showFeedback && (
-                    <PersonasPanel
-                        people={personas}
-                        onClose={() => setShowFeedback(false)}
-                    />
-                )}
-            </AnimatePresence>
+            <PersonasPanel
+                people={personas}
+                onClose={() => setShowFeedback(false)}
+            />
         </div>
     );
 }

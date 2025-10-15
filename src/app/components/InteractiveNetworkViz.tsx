@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { PersonaReactionPanel } from "./PersonaReactionPanel";
 import type { Person } from "@/types/shared";
+import { Button } from "@/components/ui/button";
+import { Play } from "lucide-react";
 
 interface PersonaNode extends Person {
     color: string;
@@ -11,6 +13,7 @@ interface PersonaNode extends Person {
 }
 
 interface InteractiveNetworkVizProps {
+    creatingResponses: boolean;
     isRunning?: boolean;
     onRunSimulation?: () => void;
     people?: Person[];
@@ -192,6 +195,7 @@ const generatePersonas = (): PersonaNode[] => {
 };
 
 export function InteractiveNetworkViz({
+    creatingResponses,
     isRunning = false,
     onRunSimulation,
     people,
@@ -308,7 +312,6 @@ export function InteractiveNetworkViz({
                         simulationActive
                             ? {
                                   scale: [1, 1.2, 1],
-                                  rotate: [0, 180, 360],
                               }
                             : {}
                     }
@@ -326,8 +329,8 @@ export function InteractiveNetworkViz({
                                 style={{
                                     width: `${120 + i * 60}px`,
                                     height: `${120 + i * 60}px`,
-                                    left: `${-60 - i * 30}px`,
-                                    top: `${-60 - i * 30}px`,
+                                    left: `${-20 - i * 30}px`,
+                                    top: `${-20 - i * 30}px`,
                                 }}
                                 animate={{
                                     rotate: simulationActive ? 360 : 0,
@@ -413,8 +416,8 @@ export function InteractiveNetworkViz({
                         key={`line-${persona.id}`}
                         x1="50%"
                         y1="50%"
-                        x2={`calc(50% + ${persona.x}px)`}
-                        y2={`calc(50% + ${persona.y}px)`}
+                        x2={`calc(50.6% + ${persona.x}px)`}
+                        y2={`calc(51% + ${persona.y}px)`}
                         stroke="url(#connectionGradient)"
                         strokeWidth={
                             selectedNode?.id === persona.id ? "2" : "1"
@@ -565,6 +568,44 @@ export function InteractiveNetworkViz({
                     </motion.div>
                 )}
             </AnimatePresence>
+            {/* Fixed Run Simulation Button */}
+            <motion.div
+                className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+            >
+                <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                >
+                    <Button
+                        onClick={handleRunSimulation}
+                        disabled={personas.length === 0 || creatingResponses}
+                        className="px-8 py-4 text-white border-2 border-transparent relative overflow-hidden group text-lg shadow-2xl"
+                        style={{
+                            background:
+                                "linear-gradient(135deg, #6EE7B7, #2563EB, #A855F7)",
+                            borderRadius: "12px",
+                        }}
+                    >
+                        <div
+                            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                            style={{
+                                background:
+                                    "linear-gradient(135deg, rgba(110, 231, 183, 0.3), rgba(37, 99, 235, 0.3), rgba(168, 85, 247, 0.3))",
+                                filter: "blur(4px)",
+                            }}
+                        />
+                        <span className="relative z-10 flex items-center gap-2">
+                            <Play className="w-5 h-5" />
+                            {creatingResponses
+                                ? "Generating Responses..."
+                                : "Run Simulation"}
+                        </span>
+                    </Button>
+                </motion.div>
+            </motion.div>
 
             {/* Persona Reaction Panel */}
             <AnimatePresence>

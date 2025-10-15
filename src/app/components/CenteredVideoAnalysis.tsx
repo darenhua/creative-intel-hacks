@@ -218,37 +218,36 @@ export function CenteredVideoAnalysis({
                                     transition={{ delay: 0.4 }}
                                     className="absolute top-6 right-6"
                                 >
-                                    <motion.div
-                                        className="px-4 py-2 backdrop-blur-sm border rounded-full text-sm text-white relative"
-                                        style={{
-                                            background:
-                                                "rgba(37, 99, 235, 0.2)",
-                                            borderColor:
-                                                "rgba(37, 99, 235, 0.4)",
-                                        }}
-                                        animate={{
-                                            boxShadow: [
-                                                "0 0 0 0 rgba(37, 99, 235, 0.4)",
-                                                "0 0 0 12px rgba(37, 99, 235, 0)",
-                                                "0 0 0 0 rgba(37, 99, 235, 0)",
-                                            ],
-                                        }}
-                                        transition={{
-                                            duration: 2,
-                                            repeat: Infinity,
-                                            ease: "easeInOut",
-                                        }}
-                                    >
+                                    {isSimulating && (
                                         <motion.div
-                                            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-blue-400 rounded-full"
-                                            animate={{ opacity: [1, 0.3, 1] }}
-                                            transition={{
-                                                duration: 1.5,
-                                                repeat: Infinity,
+                                            className="px-4 py-2 backdrop-blur-sm border rounded-full text-sm text-white relative"
+                                            style={{
+                                                background:
+                                                    "rgba(37, 99, 235, 0.2)",
+                                                borderColor:
+                                                    "rgba(37, 99, 235, 0.4)",
                                             }}
-                                        />
-                                        <span className="ml-4">Analyzing…</span>
-                                    </motion.div>
+                                            transition={{
+                                                duration: 2,
+                                                repeat: Infinity,
+                                                ease: "easeInOut",
+                                            }}
+                                        >
+                                            <motion.div
+                                                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-blue-400 rounded-full"
+                                                animate={{
+                                                    opacity: [1, 0.3, 1],
+                                                }}
+                                                transition={{
+                                                    duration: 1.5,
+                                                    repeat: Infinity,
+                                                }}
+                                            />
+                                            <span className="ml-4">
+                                                Analyzing…
+                                            </span>
+                                        </motion.div>
+                                    )}
                                 </motion.div>
                             </motion.div>
                         ) : (
@@ -300,7 +299,7 @@ export function CenteredVideoAnalysis({
                                 >
                                     {tag}
                                 </motion.div>
-                            )
+                            ),
                         )}
                     </div>
 
@@ -374,103 +373,6 @@ export function CenteredVideoAnalysis({
                         </div>
                     </div>
                 </motion.div>
-
-                {/* Prompt Input - Hide when analysis report is shown */}
-                {!showAnalysisReport && (
-                    <motion.div
-                        className="w-full"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ delay: 1.3 }}
-                    >
-                        <div
-                            className="rounded-2xl p-4"
-                            style={{
-                                background: "rgba(0, 0, 0, 0.6)",
-                                backdropFilter: "blur(20px)",
-                                border: `1px solid ${
-                                    prompt.trim()
-                                        ? "rgba(110, 231, 183, 0.3)"
-                                        : "rgba(255, 255, 255, 0.1)"
-                                }`,
-                                boxShadow: prompt.trim()
-                                    ? "0 0 40px rgba(110, 231, 183, 0.1)"
-                                    : "none",
-                            }}
-                        >
-                            {/* Ready indicator */}
-
-                            <div className="flex items-center gap-3">
-                                <Input
-                                    value={prompt}
-                                    onChange={(e) =>
-                                        onPromptChange(e.target.value)
-                                    }
-                                    placeholder="Simulate how 25 Gen Z tech enthusiasts react to this ad"
-                                    className="bg-transparent border-none text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/10 flex-1"
-                                    onKeyPress={(e) => {
-                                        if (
-                                            e.key === "Enter" &&
-                                            prompt.trim() &&
-                                            !isSimulating
-                                        ) {
-                                            onSimulate();
-                                        }
-                                    }}
-                                />
-                                <motion.div
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                >
-                                    <Button
-                                        onClick={onSimulate}
-                                        disabled={
-                                            !prompt.trim() || isSimulating
-                                        }
-                                        className="px-6 py-2 text-white border-2 border-transparent relative overflow-hidden group"
-                                        style={{
-                                            background:
-                                                "linear-gradient(135deg, #6EE7B7, #2563EB, #A855F7)",
-                                            borderRadius: "12px",
-                                        }}
-                                    >
-                                        {/* Glow effect */}
-                                        <div
-                                            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                                            style={{
-                                                background:
-                                                    "linear-gradient(135deg, rgba(110, 231, 183, 0.3), rgba(37, 99, 235, 0.3), rgba(168, 85, 247, 0.3))",
-                                                filter: "blur(4px)",
-                                            }}
-                                        />
-
-                                        <span className="relative z-10 flex items-center gap-2">
-                                            {isSimulating ? (
-                                                <>
-                                                    <motion.div
-                                                        className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
-                                                        animate={{
-                                                            rotate: 360,
-                                                        }}
-                                                        transition={{
-                                                            duration: 1,
-                                                            repeat: Infinity,
-                                                            ease: "linear",
-                                                        }}
-                                                    />
-                                                    Running...
-                                                </>
-                                            ) : (
-                                                "Run Simulation"
-                                            )}
-                                        </span>
-                                    </Button>
-                                </motion.div>
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
             </motion.div>
         </div>
     );

@@ -21,13 +21,13 @@ export function MissionStatus({
     isResponsesState = false,
 }: MissionStatusProps) {
     const [activeTab, setActiveTab] = useState<"personas" | "analysis">(
-        "personas"
+        "personas",
     );
 
     const progress =
         filteredPeople.length > 0
             ? Math.round(
-                  (personaResponses.length / filteredPeople.length) * 100
+                  (personaResponses.length / filteredPeople.length) * 100,
               )
             : 0;
 
@@ -46,21 +46,21 @@ export function MissionStatus({
                                                 ? "bg-green-400"
                                                 : "bg-yellow-400"
                                             : progress === 100
-                                            ? "bg-green-400"
-                                            : "bg-yellow-400"
+                                              ? "bg-green-400"
+                                              : "bg-yellow-400"
                                     }`}
                                 ></div>
                                 {!isResponsesState
                                     ? "PERSONA GENERATION"
-                                    : "MISSION STATUS"}
+                                    : "MISSION GA"}
                                 <span className="ml-auto text-white">
                                     {!isResponsesState
                                         ? filteredPeople.length > 0
                                             ? "ACTIVE"
                                             : "PENDING"
                                         : progress === 100
-                                        ? "COMPLETE"
-                                        : "IN PROGRESS"}
+                                          ? "COMPLETE"
+                                          : "IN PROGRESS"}
                                 </span>
                             </div>
                             {!isResponsesState ? (
@@ -77,7 +77,7 @@ export function MissionStatus({
                                                     100,
                                                     (filteredPeople.length /
                                                         10) *
-                                                        100
+                                                        100,
                                                 )}%`,
                                             }}
                                             transition={{ duration: 0.5 }}
@@ -182,7 +182,7 @@ export function MissionStatus({
                                                     Persona:{" "}
                                                     {response.persona_id?.slice(
                                                         0,
-                                                        8
+                                                        8,
                                                     )}
                                                 </div>
                                             </div>
@@ -247,8 +247,8 @@ export function MissionStatus({
                         activeTab === "analysis"
                             ? "bg-blue-500/20 text-blue-400 border border-blue-400/30"
                             : isResponsesState
-                            ? "bg-gray-800/40 text-white/50 border border-transparent hover:bg-gray-800/60"
-                            : "bg-gray-800/20 text-white/20 border border-transparent cursor-not-allowed"
+                              ? "bg-gray-800/40 text-white/50 border border-transparent hover:bg-gray-800/60"
+                              : "bg-gray-800/20 text-white/20 border border-transparent cursor-not-allowed"
                     }`}
                 >
                     Simulation Analysis

@@ -113,13 +113,13 @@ export default function SimulationPage() {
                                 try {
                                     const analysis =
                                         await generateAnalysisFromResponses(
-                                            projectId as string
+                                            projectId as string,
                                         );
                                     setAnalysisData(analysis);
                                 } catch (error) {
                                     console.error(
                                         "Error generating analysis:",
-                                        error
+                                        error,
                                     );
                                 } finally {
                                     setIsAnalyzing(false);
@@ -134,7 +134,7 @@ export default function SimulationPage() {
                 });
             }, 300);
         },
-        [projectId]
+        [projectId],
     );
 
     // Auto-start simulation if we have persona responses but no analysis yet
@@ -182,7 +182,7 @@ export default function SimulationPage() {
                         <Button
                             onClick={() =>
                                 router.push(
-                                    `/${username}/projects/${projectId}/dashboard`
+                                    `/${username}/projects/${projectId}/dashboard`,
                                 )
                             }
                             variant="ghost"
@@ -246,17 +246,6 @@ export default function SimulationPage() {
                         }}
                     />
                 )}
-            </AnimatePresence>
-
-            <AnimatePresence>
-                {/* {showAnalysisReport && (
-                    <AnalysisReport
-                        isVisible={showAnalysisReport}
-                        people={personas}
-                        onExpand={() => setShowExpandedReport(true)}
-                        analysisData={analysisData}
-                    />
-                )} */}
             </AnimatePresence>
 
             <AnimatePresence>
