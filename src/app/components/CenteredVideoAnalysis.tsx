@@ -90,29 +90,7 @@ export function CenteredVideoAnalysis({
     };
 
     return (
-        <div className="flex flex-col items-center justify-center px-8 py-12 relative  overflow-hidden">
-            {/* Orbit Ring Background */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-                <motion.div
-                    className="w-[800px] h-[800px] border border-white/5 rounded-full"
-                    animate={{ rotate: 360 }}
-                    transition={{
-                        duration: 120,
-                        repeat: Infinity,
-                        ease: "linear",
-                    }}
-                />
-                <motion.div
-                    className="absolute w-[600px] h-[600px] border border-white/3 rounded-full"
-                    animate={{ rotate: -360 }}
-                    transition={{
-                        duration: 80,
-                        repeat: Infinity,
-                        ease: "linear",
-                    }}
-                />
-            </div>
-
+        <div className="flex flex-col items-center justify-center px-8 py-12 relative">
             {/* Main Video Analysis Card */}
             <motion.div
                 className="w-full max-w-2xl relative z-10"

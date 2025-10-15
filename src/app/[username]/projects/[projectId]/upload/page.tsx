@@ -24,7 +24,7 @@ export default function UploadPage() {
     const [uploadedVideo, setUploadedVideo] = useState<File | null>(null);
     const [uploadedAd, setUploadedAd] = useState<Ad | null>(null);
     const [prompt, setPrompt] = useState(
-        "Software Engineers and Adtech professionals in New York City"
+        "Software Engineers and Adtech professionals in New York City",
     );
     const [isLoading, setIsLoading] = useState(false);
     const [uploadError, setUploadError] = useState<string | null>(null);
@@ -79,7 +79,7 @@ export default function UploadPage() {
 
                 if (adError) {
                     throw new Error(
-                        `Database insert failed: ${adError.message}`
+                        `Database insert failed: ${adError.message}`,
                     );
                 }
 
@@ -110,7 +110,7 @@ export default function UploadPage() {
                 projectId as string,
                 prompt,
                 uploadedAd!.id,
-                isDogWalker
+                isDogWalker,
             );
             return jobData;
         },
@@ -161,13 +161,13 @@ export default function UploadPage() {
             setUploadError(
                 error instanceof Error
                     ? error.message
-                    : "Failed to start simulation"
+                    : "Failed to start simulation",
             );
         }
     };
 
     return (
-        <div className="h-screen bg-black text-white overflow-scroll relative">
+        <div className="h-screen bg-black text-white relative">
             {/* Header */}
             <div className="border-b border-gray-800/50 bg-black/80 backdrop-blur-sm relative z-50">
                 <div className="flex items-center justify-between px-6 py-4">
@@ -188,42 +188,11 @@ export default function UploadPage() {
                             </p>
                         </div>
                     </div>
-
-                    <Button
-                        onClick={() => router.push("/")}
-                        variant="ghost"
-                        size="sm"
-                        className="text-white hover:bg-gray-800 hover:text-red-400 transition-colors"
-                    >
-                        <LogOut className="w-4 h-4" />
-                    </Button>
                 </div>
             </div>
 
             {/* Main Content */}
-            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-73px)] px-8 py-12 relative">
-                {/* Orbit Ring Background */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <motion.div
-                        className="w-[800px] h-[800px] border border-white/5 rounded-full"
-                        animate={{ rotate: 360 }}
-                        transition={{
-                            duration: 120,
-                            repeat: Infinity,
-                            ease: "linear",
-                        }}
-                    />
-                    <motion.div
-                        className="absolute w-[600px] h-[600px] border border-white/3 rounded-full"
-                        animate={{ rotate: -360 }}
-                        transition={{
-                            duration: 80,
-                            repeat: Infinity,
-                            ease: "linear",
-                        }}
-                    />
-                </div>
-
+            <div className="flex flex-col items-center justify-center  px-8 py-24 relative">
                 {/* Upload Card */}
                 <motion.div
                     className="w-full max-w-2xl relative z-10"
@@ -395,7 +364,7 @@ export default function UploadPage() {
                             }}
                         />
                     </div>
-                    <Filters />
+                    {/*<Filters />*/}
                     {/* Run Simulation Button */}
                     <motion.div
                         whileHover={{ scale: 1.02 }}

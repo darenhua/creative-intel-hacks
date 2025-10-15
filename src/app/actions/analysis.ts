@@ -14,12 +14,11 @@ export interface AnalysisData {
     demographics: Array<{
         label: string;
         value: number;
-        color: string;
     }>;
 }
 
 export async function generateAnalysisFromResponses(
-    jobId: string
+    jobId: string,
 ): Promise<AnalysisData> {
     const supabase = await createServerClient();
 
@@ -81,7 +80,7 @@ ${conversationSummaries
 Persona ${i + 1}: ${p.personaName}
 Background: ${p.personaDescription}
 Conversation: ${JSON.stringify(p.conversation)}
-`
+`,
     )
     .join("\n")}
 
@@ -102,12 +101,12 @@ Return your analysis in this EXACT JSON format (no markdown, no code blocks, jus
     "negative": 10
   },
   "demographics": [
-    {"label": "Millennials", "value": 85, "color": "#2563eb"},
-    {"label": "Gen Z Engagement", "value": 72, "color": "#a855f7"}
+    {"label": "Millennials", "value": 85},
+    {"label": "Gen Z Engagement", "value": 72}
   ]
 }
 
-Ensure percentages in sentiment add up to exactly 100. For demographics, use appropriate color hex codes.`;
+Ensure percentages in sentiment add up to exactly 100.`;
 
     const message = await anthropic.messages.create({
         model: "claude-3-5-sonnet-20241022",
@@ -142,15 +141,13 @@ Ensure percentages in sentiment add up to exactly 100. For demographics, use app
             // Normalize if not exactly 100
             const factor = 100 / sentimentTotal;
             analysis.sentiment.positive = Math.round(
-                analysis.sentiment.positive * factor
+                analysis.sentiment.positive * factor,
             );
             analysis.sentiment.neutral = Math.round(
-                analysis.sentiment.neutral * factor
+                analysis.sentiment.neutral * factor,
             );
             analysis.sentiment.negative =
-                100 -
-                analysis.sentiment.positive -
-                analysis.sentiment.neutral;
+                100 - analysis.sentiment.positive - analysis.sentiment.neutral;
         }
 
         return analysis;
@@ -175,7 +172,6 @@ Ensure percentages in sentiment add up to exactly 100. For demographics, use app
                 {
                     label: "Primary Audience",
                     value: 75,
-                    color: "#2563eb",
                 },
             ],
         };

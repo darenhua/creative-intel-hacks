@@ -26,12 +26,16 @@ interface FeedbackPanelProps {
     personaResponses: PersonaResponse[];
     onClose: () => void;
     analysisData?: AnalysisData | null;
+    isAnalyzing?: boolean;
+    showAnalysisReport: boolean;
 }
 
 export function FeedbackPanel({
     personaResponses,
     onClose,
     analysisData = null,
+    isAnalyzing = false,
+    showAnalysisReport,
 }: FeedbackPanelProps) {
     // Extract conversation data and create simplified stats
     const conversations = personaResponses.map((response) => {
@@ -94,7 +98,7 @@ export function FeedbackPanel({
                             letterSpacing: "0.05em",
                         }}
                     >
-                        FEEDBACK SUMMARY
+                        Creative IQ Insights
                     </h2>
                     <Button
                         variant="ghost"
@@ -102,9 +106,7 @@ export function FeedbackPanel({
                         onClick={onClose}
                         className="text-white/50 hover:text-white hover:bg-white/5 border-0 transition-colors duration-200"
                         style={{ width: "32px", height: "32px" }}
-                    >
-                        <X className="w-4 h-4" />
-                    </Button>
+                    ></Button>
                 </div>
 
                 {/* Stats Row */}
@@ -160,6 +162,335 @@ export function FeedbackPanel({
                         </div>
                     </div>
                 </div>
+
+                {/* Separator */}
+                <div className="w-full h-px bg-gray-800 mb-8"></div>
+
+                {/* AI Insights Summary Section */}
+                {isAnalyzing ? (
+                    <div className="mb-8 text-center py-8">
+                        <div
+                            className="text-white/70 mb-2"
+                            style={{
+                                fontFamily: "Inter, system-ui, sans-serif",
+                                fontSize: "13px",
+                                fontWeight: "400",
+                            }}
+                        >
+                            Analyzing responses with AI...
+                        </div>
+                        <div
+                            className="text-white/50"
+                            style={{
+                                fontFamily: "Inter, system-ui, sans-serif",
+                                fontSize: "12px",
+                                fontWeight: "400",
+                            }}
+                        >
+                            Generating insights
+                        </div>
+                    </div>
+                ) : showAnalysisReport && analysisData ? (
+                    <div className="mb-8">
+                        <div className=" rounded-lg mb-6">
+                            <div className="space-y-6">
+                                {/* Themes Section */}
+                                <div>
+                                    <h3
+                                        className="text-white/90 mb-3"
+                                        style={{
+                                            fontFamily:
+                                                "Inter, system-ui, sans-serif",
+                                            fontSize: "14px",
+                                            fontWeight: "500",
+                                            letterSpacing: "0.05em",
+                                        }}
+                                    >
+                                        Themes
+                                    </h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {analysisData.themes.map((tag, i) => (
+                                            <motion.div
+                                                key={tag}
+                                                className="px-2 py-1 rounded-full border border-white/10 text-white/70 cursor-pointer hover:border-white/30 hover:text-white/90 hover:bg-white/10 transition-all duration-300 bg-white/5"
+                                                style={{
+                                                    fontFamily:
+                                                        "Inter, system-ui, sans-serif",
+                                                    fontSize: "12px",
+                                                    fontWeight: "400",
+                                                }}
+                                            >
+                                                #{tag}
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                </div>
+                                {/* Separator */}
+                                <div className="w-full h-px bg-gray-800 mb-8"></div>
+
+                                {/* Highlights Section */}
+                                <div>
+                                    <h3
+                                        className="text-white/90 mb-3"
+                                        style={{
+                                            fontFamily:
+                                                "Inter, system-ui, sans-serif",
+                                            fontSize: "14px",
+                                            fontWeight: "500",
+                                            letterSpacing: "0.05em",
+                                        }}
+                                    >
+                                        Comment Highlights
+                                    </h3>
+                                    <div className="space-y-2">
+                                        {analysisData.highlights.map(
+                                            (highlight, i) => (
+                                                <motion.div
+                                                    key={i}
+                                                    initial={{
+                                                        opacity: 0,
+                                                        x: -10,
+                                                    }}
+                                                    animate={{
+                                                        opacity: 1,
+                                                        x: 0,
+                                                    }}
+                                                    transition={{
+                                                        delay: 0.3 + i * 0.3,
+                                                        duration: 0.6,
+                                                        ease: "easeOut",
+                                                    }}
+                                                    className="text-white/70 flex items-start gap-2"
+                                                    style={{
+                                                        fontFamily:
+                                                            "Inter, system-ui, sans-serif",
+                                                        fontSize: "13px",
+                                                        fontWeight: "400",
+                                                    }}
+                                                >
+                                                    <div className="w-1 h-1 bg-white/40 rounded-full mt-1.5 flex-shrink-0" />
+                                                    <span>
+                                                        &quot;{highlight}&quot;
+                                                    </span>
+                                                </motion.div>
+                                            ),
+                                        )}
+                                    </div>
+                                </div>
+                                {/* Separator */}
+                                <div className="w-full h-px bg-gray-800 mb-8"></div>
+
+                                {/* Sentiment Overview */}
+                                <div>
+                                    <h3
+                                        className="text-white/90 mb-6"
+                                        style={{
+                                            fontFamily:
+                                                "Inter, system-ui, sans-serif",
+                                            fontSize: "14px",
+                                            fontWeight: "500",
+                                            letterSpacing: "0.05em",
+                                        }}
+                                    >
+                                        Sentiment Overview
+                                    </h3>
+                                    <div className="space-y-3">
+                                        {[
+                                            {
+                                                label: "Positive",
+                                                value: analysisData.sentiment
+                                                    .positive,
+                                                color: "#22c55e",
+                                            },
+                                            {
+                                                label: "Neutral",
+                                                value: analysisData.sentiment
+                                                    .neutral,
+                                                color: "#fbbf24",
+                                            },
+                                            {
+                                                label: "Negative",
+                                                value: analysisData.sentiment
+                                                    .negative,
+                                                color: "#ef4444",
+                                            },
+                                        ].map((sentiment, i) => (
+                                            <div key={sentiment.label}>
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <span
+                                                        className="text-white/70"
+                                                        style={{
+                                                            fontFamily:
+                                                                "Inter, system-ui, sans-serif",
+                                                            fontSize: "13px",
+                                                            fontWeight: "400",
+                                                        }}
+                                                    >
+                                                        {sentiment.label}
+                                                    </span>
+                                                    <span
+                                                        className="text-white/80"
+                                                        style={{
+                                                            fontFamily:
+                                                                "Inter Mono, monospace",
+                                                            fontSize: "12px",
+                                                            fontWeight: "400",
+                                                        }}
+                                                    >
+                                                        {sentiment.value}%
+                                                    </span>
+                                                </div>
+                                                <div className="w-full h-1 bg-white/5 rounded-sm overflow-hidden">
+                                                    <motion.div
+                                                        className="h-1 rounded-sm"
+                                                        style={{
+                                                            backgroundColor:
+                                                                sentiment.color,
+                                                        }}
+                                                        initial={{ width: 0 }}
+                                                        animate={{
+                                                            width: `${sentiment.value}%`,
+                                                        }}
+                                                        transition={{
+                                                            delay:
+                                                                1.2 + i * 0.2,
+                                                            duration: 0.6,
+                                                            ease: "easeOut",
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="w-full h-px bg-gray-800 mb-8"></div>
+
+                                {/* Demographic Reactions */}
+                                {analysisData.demographics &&
+                                    analysisData.demographics.length > 0 && (
+                                        <div>
+                                            <h3
+                                                className="text-white/90 mb-6"
+                                                style={{
+                                                    fontFamily:
+                                                        "Inter, system-ui, sans-serif",
+                                                    fontSize: "14px",
+                                                    fontWeight: "500",
+                                                    letterSpacing: "0.05em",
+                                                }}
+                                            >
+                                                Demographic Engagement %
+                                            </h3>
+                                            <div className="space-y-3">
+                                                {analysisData.demographics.map(
+                                                    (demo, i) => (
+                                                        <div key={demo.label}>
+                                                            <div className="flex items-center justify-between mb-2">
+                                                                <span
+                                                                    className="text-white/70"
+                                                                    style={{
+                                                                        fontFamily:
+                                                                            "Inter, system-ui, sans-serif",
+                                                                        fontSize:
+                                                                            "13px",
+                                                                        fontWeight:
+                                                                            "400",
+                                                                    }}
+                                                                >
+                                                                    {demo.label}
+                                                                </span>
+                                                                <span
+                                                                    className="text-white/80"
+                                                                    style={{
+                                                                        fontFamily:
+                                                                            "Inter Mono, monospace",
+                                                                        fontSize:
+                                                                            "12px",
+                                                                        fontWeight:
+                                                                            "400",
+                                                                    }}
+                                                                >
+                                                                    {demo.value}
+                                                                    %
+                                                                </span>
+                                                            </div>
+                                                            <div className="w-full h-1 bg-white/5 rounded-sm overflow-hidden">
+                                                                <motion.div
+                                                                    className="h-1 rounded-sm"
+                                                                    style={{
+                                                                        backgroundColor:
+                                                                            "#22c55e",
+                                                                    }}
+                                                                    initial={{
+                                                                        width: 0,
+                                                                    }}
+                                                                    animate={{
+                                                                        width: `${demo.value}%`,
+                                                                    }}
+                                                                    transition={{
+                                                                        delay:
+                                                                            1.8 +
+                                                                            i *
+                                                                                0.2,
+                                                                        duration: 0.6,
+                                                                        ease: "easeOut",
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    ),
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                            </div>
+                        </div>
+
+                        {/* Footer Attribution Text */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{
+                                delay: 2.8,
+                                duration: 0.6,
+                            }}
+                            className="text-white/50 mb-8"
+                            style={{
+                                fontFamily: "Inter, system-ui, sans-serif",
+                                fontSize: "12px",
+                                fontWeight: "400",
+                                letterSpacing: "0.05em",
+                            }}
+                        >
+                            Generated by AI personas trained on audience
+                            profiles.
+                        </motion.div>
+                    </div>
+                ) : (
+                    <div className="mb-8 text-center py-8">
+                        <div
+                            className="text-white/70 mb-2"
+                            style={{
+                                fontFamily: "Inter, system-ui, sans-serif",
+                                fontSize: "13px",
+                                fontWeight: "400",
+                            }}
+                        >
+                            Running simulation...
+                        </div>
+                        <div
+                            className="text-white/50"
+                            style={{
+                                fontFamily: "Inter, system-ui, sans-serif",
+                                fontSize: "12px",
+                                fontWeight: "400",
+                            }}
+                        >
+                            Analyzing persona reactions
+                        </div>
+                    </div>
+                )}
 
                 {/* Separator */}
                 <div className="w-full h-px bg-gray-800 mb-8"></div>
@@ -235,112 +566,6 @@ export function FeedbackPanel({
                         )}
                     </div>
                 </div>
-
-                {/* Separator */}
-                <div className="w-full h-px bg-gray-800 mb-8"></div>
-
-                {/* Top Industries */}
-                <div className="mb-8">
-                    <h3
-                        className="text-white/90 mb-4"
-                        style={{
-                            fontFamily: "Inter, system-ui, sans-serif",
-                            fontSize: "14px",
-                            fontWeight: "500",
-                            letterSpacing: "0.05em",
-                        }}
-                    >
-                        Top Industries
-                    </h3>
-
-                    <div className="space-y-3">
-                        {Object.entries(topIndustries)
-                            .sort(([, a], [, b]) => b - a)
-                            .slice(0, 3)
-                            .map(([industry, count]) => (
-                                <div
-                                    key={industry}
-                                    className="flex items-center justify-between"
-                                >
-                                    <span
-                                        className="text-white/70"
-                                        style={{
-                                            fontFamily:
-                                                "Inter, system-ui, sans-serif",
-                                            fontSize: "13px",
-                                            fontWeight: "400",
-                                        }}
-                                    >
-                                        {industry}
-                                    </span>
-                                    <span
-                                        style={{
-                                            fontFamily: "Inter Mono, monospace",
-                                            fontSize: "12px",
-                                            fontWeight: "400",
-                                            color: "#48A9A6",
-                                        }}
-                                    >
-                                        {count}
-                                    </span>
-                                </div>
-                            ))}
-                    </div>
-                </div>
-
-                {/* Separator */}
-                <div className="w-full h-px bg-gray-800 mb-8"></div>
-
-                {/* Generations */}
-                <div className="mb-8">
-                    <h3
-                        className="text-white/90 mb-4"
-                        style={{
-                            fontFamily: "Inter, system-ui, sans-serif",
-                            fontSize: "14px",
-                            fontWeight: "500",
-                            letterSpacing: "0.05em",
-                        }}
-                    >
-                        Generations
-                    </h3>
-
-                    <div className="space-y-3">
-                        {Object.entries(generations).map(
-                            ([generation, count]) => (
-                                <div
-                                    key={generation}
-                                    className="flex items-center justify-between"
-                                >
-                                    <span
-                                        className="text-white/70"
-                                        style={{
-                                            fontFamily:
-                                                "Inter, system-ui, sans-serif",
-                                            fontSize: "13px",
-                                            fontWeight: "400",
-                                        }}
-                                    >
-                                        {generation}
-                                    </span>
-                                    <span
-                                        style={{
-                                            fontFamily: "Inter Mono, monospace",
-                                            fontSize: "12px",
-                                            fontWeight: "400",
-                                            color: "#F5D76E",
-                                        }}
-                                    >
-                                        {count}
-                                    </span>
-                                </div>
-                            ),
-                        )}
-                    </div>
-                </div>
-
-                {/* Separator */}
-                <div className="w-full h-px bg-gray-800 mb-8"></div>
             </div>
         </motion.div>
     );

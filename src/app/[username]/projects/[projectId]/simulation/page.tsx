@@ -157,8 +157,25 @@ export default function SimulationPage() {
         );
     }
 
+    // Extract conversation data and create simplified stats
+    const conversations = personaResponses?.map((response) => {
+        const conversation = response.conversation;
+        // Extract the user's response from the conversation
+        // Assuming conversation is an array of messages with role and content
+        const userMessage =
+            (conversation as any)?.response || "No response available";
+
+        return {
+            id: response.id,
+            name: response.persona?.name || "Unknown",
+            location: response.persona?.location || "Unknown",
+            feedback: userMessage,
+            reaction: "interested", // Default since we don't have reaction data in responses
+        };
+    });
+
     return (
-        <div className="h-screen bg-black text-white overflow-hidden relative">
+        <div className="h-screen bg-black text-white overflow-hidden relative mr-80">
             {/* Header */}
             <div className="border-b border-gray-800/50 bg-black/80 backdrop-blur-sm relative z-50">
                 <div className="flex items-center justify-between px-6 py-4">
@@ -187,9 +204,9 @@ export default function SimulationPage() {
                 </div>
             </div>
 
-            <div className="flex h-[calc(100vh-73px)] relative">
+            <div className="flex h-[calc(100vh-50px)] w-full overflow-hidden relative">
                 {/* Main Content Area */}
-                <div className="flex-1 relative overflow-auto">
+                <div className="flex-1 relative overflow-scroll pr-[17px] w-full h-full box-content flex flex-col">
                     <CenteredVideoAnalysis
                         jobId={projectId as string}
                         prompt={prompt}
@@ -198,15 +215,71 @@ export default function SimulationPage() {
                         isSimulating={isSimulating}
                         showAnalysisReport={showAnalysisReport}
                     />
-                </div>
 
-                {/* Right Sidebar */}
-                <VideoAnalysisSidebar
-                    showAnalysisReport={showAnalysisReport}
-                    onViewFeedback={() => setShowFeedback(true)}
-                    analysisData={analysisData}
-                    isAnalyzing={isAnalyzing}
-                />
+                    {/* User Responses */}
+                    <div className="mb-10 mr-8">
+                        <div className="space-y-3 ">
+                            {conversations?.map((conversation, index) => (
+                                <motion.div
+                                    key={conversation.id}
+                                    initial={{ opacity: 0, y: 5 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.05 }}
+                                    className="p-3 rounded-sm"
+                                    style={{
+                                        background: "rgba(255, 255, 255, 0.02)",
+                                        border: "1px solid #1C1C1C",
+                                    }}
+                                >
+                                    <div className="flex items-start gap-3 mb-2">
+                                        <div
+                                            className="w-8 h-8 rounded-full flex-shrink-0"
+                                            style={{
+                                                background: `linear-gradient(135deg, #6EE7B7, #2563EB)`,
+                                            }}
+                                        />
+                                        <div className="flex-1 min-w-0">
+                                            <h4
+                                                className="text-white mb-0.5"
+                                                style={{
+                                                    fontFamily:
+                                                        "Inter, system-ui, sans-serif",
+                                                    fontSize: "13px",
+                                                    fontWeight: "500",
+                                                }}
+                                            >
+                                                {conversation.name}
+                                            </h4>
+                                            <p
+                                                className="text-white/50"
+                                                style={{
+                                                    fontFamily:
+                                                        "Inter, system-ui, sans-serif",
+                                                    fontSize: "11px",
+                                                    fontWeight: "400",
+                                                }}
+                                            >
+                                                {conversation.location}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <p
+                                        className="text-white/70"
+                                        style={{
+                                            fontFamily:
+                                                "Inter, system-ui, sans-serif",
+                                            fontSize: "12px",
+                                            fontWeight: "400",
+                                            lineHeight: "1.4",
+                                        }}
+                                    >
+                                        {conversation.feedback}
+                                    </p>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <AnimatePresence>
@@ -219,11 +292,12 @@ export default function SimulationPage() {
                 )}
             </AnimatePresence>
 
-            {/*<FeedbackPanel
+            <FeedbackPanel
                 personaResponses={personaResponses || []}
                 onClose={() => setShowFeedback(false)}
                 analysisData={analysisData}
-            />*/}
+                showAnalysisReport={true}
+            />
         </div>
     );
 }
