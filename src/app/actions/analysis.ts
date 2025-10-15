@@ -156,24 +156,6 @@ Ensure percentages in sentiment add up to exactly 100.`;
         console.error("Raw response:", analysisText);
 
         // Return fallback data
-        return {
-            highlights: [
-                "Analysis generated from persona responses",
-                "Multiple perspectives captured",
-                "Insights available in full report",
-            ],
-            themes: ["Response", "Feedback", "Analysis", "Insight"],
-            sentiment: {
-                positive: 60,
-                neutral: 30,
-                negative: 10,
-            },
-            demographics: [
-                {
-                    label: "Primary Audience",
-                    value: 75,
-                },
-            ],
-        };
+        return null;
     }
 }

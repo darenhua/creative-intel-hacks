@@ -7,7 +7,7 @@ const apiClient = createClient<paths>({
 });
 
 export function formDataSerializer<T extends Record<string, string | Blob>>(
-    data: T
+    data: T,
 ): FormData {
     const formData = new FormData();
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { PersonaReactionPanel } from "./PersonaReactionPanel";
 import type { Person } from "@/types/shared";
@@ -205,23 +205,30 @@ export function InteractiveNetworkViz({
     // Note: isRunning prop is available for future use
     // Use the people prop if provided, otherwise generate personas
     const shouldUsePeople = people && people.length > 0;
-    const [personas] = useState<PersonaNode[]>(() => {
-        if (shouldUsePeople) {
-            // Convert people to PersonaNode format
-            return people.map((person, index) => ({
-                ...person,
-                color: `hsl(${index * 30}, 70%, 60%)`,
-                x:
-                    Math.cos((index / people.length) * 2 * Math.PI) *
-                    (200 + Math.random() * 80),
-                y:
-                    Math.sin((index / people.length) * 2 * Math.PI) *
-                    (200 + Math.random() * 80),
-                engagement: 45 + Math.random() * 50,
-            }));
-        }
-        return generatePersonas();
-    });
+    const personas = useMemo(() => {
+        return people?.map((person, index) => ({
+            ...person,
+            color: `hsl(${index * 30}, 70%, 60%)`,
+            x:
+                Math.cos((index / people.length) * 2 * Math.PI) *
+                (200 + Math.random() * 80),
+            y:
+                Math.sin((index / people.length) * 2 * Math.PI) *
+                (200 + Math.random() * 80),
+            engagement: 45 + Math.random() * 50,
+        }));
+    }, [people]);
+
+    const stars = useMemo(() => {
+        return [...Array(100)].map((_, i) => ({
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            duration: 2 + Math.random() * 3,
+            delay: Math.random() * 2,
+        }));
+    }, []); // Empty dependency array = only generate once
+
+    console.log("test", people, personas);
     const [hoveredNode, setHoveredNode] = useState<PersonaNode | null>(null);
     const [selectedNode, setSelectedNode] = useState<PersonaNode | null>(null);
     const [showPersonaPanel, setShowPersonaPanel] = useState(false);
@@ -283,22 +290,22 @@ export function InteractiveNetworkViz({
         >
             {/* Star particles background */}
             <div className="absolute inset-0">
-                {[...Array(100)].map((_, i) => (
+                {stars.map((star, i) => (
                     <motion.div
                         key={i}
                         className="absolute w-1 h-1 bg-white rounded-full opacity-20"
                         style={{
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
+                            left: star.left,
+                            top: star.top,
                         }}
                         animate={{
                             opacity: [0.2, 0.8, 0.2],
                             scale: [0.5, 1, 0.5],
                         }}
                         transition={{
-                            duration: 2 + Math.random() * 3,
+                            duration: star.duration,
                             repeat: Infinity,
-                            delay: Math.random() * 2,
+                            delay: star.delay,
                         }}
                     />
                 ))}

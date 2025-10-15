@@ -15,7 +15,6 @@ import {
     getJobById,
     getPersonaResponses,
 } from "@/app/actions/personas";
-import { mockPeople } from "@/lib/mockPeople";
 import type { Person } from "@/types/shared";
 import apiClient from "@/lib/api-client";
 
@@ -39,8 +38,18 @@ export default function DashboardPage() {
     // Fetch personas for this job (projectId = jobId)
     const { data: fetchedPersonas, isLoading: personasLoading } = useQuery({
         queryKey: ["personas", projectId],
-        queryFn: () => getPersonasByJobId(projectId as string),
+        queryFn: async () => {
+            const res = await getPersonasByJobId(projectId as string);
+            return res;
+        },
         enabled: !!projectId,
+        refetchInterval(query) {
+            console.log(query);
+            if (query.state.data?.completed) {
+                return false;
+            }
+            return 500;
+        },
     });
 
     // Fetch job details
@@ -50,13 +59,10 @@ export default function DashboardPage() {
         enabled: !!projectId,
     });
 
-    const isLoading = personasLoading || jobLoading;
+    const isLoading = jobLoading;
 
     // Use fetched personas if available, otherwise fallback to mock data
-    const personas =
-        fetchedPersonas && fetchedPersonas.length > 0
-            ? fetchedPersonas
-            : mockPeople;
+    const personas = fetchedPersonas?.personas;
 
     // Persona response mutation
     const { mutateAsync: createResponses, isPending: creatingResponses } =
@@ -111,7 +117,7 @@ export default function DashboardPage() {
                             onClick={() => router.push(`/${username}/projects`)}
                             variant="ghost"
                             size="sm"
-                            className="text-white hover:bg-gray-800"
+                            className="text-white hover:bg-gray-200"
                         >
                             <ChevronLeft className="w-4 h-4 mr-1" />
                             Back

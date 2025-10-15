@@ -6,7 +6,7 @@ export async function updateJob(
     jobId: string,
     demographic: string,
     adsId: string,
-    isDogWalker: boolean = false
+    isDogWalker: boolean = false,
 ) {
     const supabase = await createServerClient();
 

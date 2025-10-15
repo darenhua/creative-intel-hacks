@@ -147,7 +147,7 @@ export function FeedbackPanel({
                         >
                             {analysisData
                                 ? `${analysisData.sentiment.positive}%`
-                                : "94.2%"}
+                                : "--"}
                         </div>
                         <div
                             className="text-white/60"

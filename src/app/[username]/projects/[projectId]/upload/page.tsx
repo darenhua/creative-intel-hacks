@@ -30,31 +30,35 @@ export default function UploadPage() {
     const [uploadError, setUploadError] = useState<string | null>(null);
 
     // Video analysis mutation
-    const { mutate: analyzeVideo, isPending: analyzingVideo } = useMutation({
-        mutationFn: async () => {
-            const response = await apiClient.POST("/{job_id}/video", {
-                params: {
-                    path: {
-                        job_id: projectId as string,
+    const { mutateAsync: analyzeVideo, isPending: analyzingVideo } =
+        useMutation({
+            mutationFn: async () => {
+                const response = await apiClient.POST(
+                    "/video/{job_id}/initialize",
+                    {
+                        params: {
+                            path: {
+                                job_id: projectId as string,
+                            },
+                        },
                     },
-                },
-            });
-            return response.data;
-        },
-    });
+                );
+                return response.data;
+            },
+        });
 
     // Video upload mutation
     const { mutate: uploadVideoToSupabase, isPending: uploadingVideo } =
         useMutation({
             mutationFn: async (video: File) => {
-                const fileName = `${Date.now()}-${video.name}`;
+                const fileName = `jobs/${projectId}/ad.mp4`;
 
                 // Upload file to Supabase storage
                 const { error: uploadError } = await supabase.storage
                     .from("videos")
                     .upload(fileName, video, {
                         cacheControl: "3600",
-                        upsert: false,
+                        upsert: true,
                     });
 
                 if (uploadError) {
@@ -89,9 +93,6 @@ export default function UploadPage() {
                 setUploadedAd(data);
                 setUploadError(null);
                 setIsLoading(false);
-
-                // Immediately trigger video analysis
-                analyzeVideo();
             },
             onError: (error) => {
                 setUploadError(error.message);
@@ -151,8 +152,8 @@ export default function UploadPage() {
 
         try {
             await updateJob();
-
             await createPersonas();
+            await analyzeVideo();
 
             // Navigate to dashboard immediately
             router.push(`/${username}/projects/${projectId}/dashboard`);
@@ -176,7 +177,7 @@ export default function UploadPage() {
                             onClick={() => router.push(`/${username}/projects`)}
                             variant="ghost"
                             size="sm"
-                            className="text-white hover:bg-gray-800"
+                            className="text-white hover:bg-gray-200"
                         >
                             <ChevronLeft className="w-4 h-4 mr-1" />
                             Back
@@ -259,9 +260,8 @@ export default function UploadPage() {
                                                     }}
                                                 />
                                                 <span className="text-sm text-white/70">
-                                                    Uploading to cloud
-                                                    storage... This will
-                                                    continue in the background.
+                                                    Uploading to cloud storage,
+                                                    please wait...
                                                 </span>
                                             </div>
                                         </div>

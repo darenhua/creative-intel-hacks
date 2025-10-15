@@ -47,7 +47,10 @@ export default function SimulationPage() {
     // Fetch personas for this job (projectId = jobId)
     const { data: fetchedPersonas, isLoading: personasLoading } = useQuery({
         queryKey: ["personas", projectId],
-        queryFn: () => getPersonasByJobId(projectId as string),
+        queryFn: async () => {
+            const res = await getPersonasByJobId(projectId as string);
+            return res.personas;
+        },
         enabled: !!projectId,
     });
 
@@ -188,7 +191,7 @@ export default function SimulationPage() {
                             }
                             variant="ghost"
                             size="sm"
-                            className="text-white hover:bg-gray-800"
+                            className="text-white hover:bg-gray-200"
                         >
                             <ChevronLeft className="w-4 h-4 mr-1" />
                             Back
@@ -217,7 +220,7 @@ export default function SimulationPage() {
                     />
 
                     {/* User Responses */}
-                    <div className="mb-10 mr-8">
+                    <div className="mb-10 mr-12">
                         <div className="space-y-3 ">
                             {conversations?.map((conversation, index) => (
                                 <motion.div

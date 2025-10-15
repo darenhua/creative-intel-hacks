@@ -3,7 +3,13 @@
 import { createServerClient } from "@/lib/supabase/server";
 import type { Person } from "@/types/shared";
 
-export async function getPersonasByJobId(jobId: string): Promise<Person[]> {
+interface pollingPersonasType {
+    personas: Person[];
+    completed: boolean;
+}
+export async function getPersonasByJobId(
+    jobId: string,
+): Promise<pollingPersonasType> {
     const supabase = await createServerClient();
 
     const { data: personas, error } = await supabase
@@ -11,13 +17,21 @@ export async function getPersonasByJobId(jobId: string): Promise<Person[]> {
         .select("*")
         .eq("job_id", jobId);
 
+    const { data: job, error: jobError } = await supabase
+        .from("jobs")
+        .select("*")
+        .eq("id", jobId)
+        .single();
+
     if (error) {
         console.error("Error fetching personas:", error);
-        return [];
+        return { personas: [], completed: false };
     }
 
+    const completed = job.personas_synced_at !== null;
+
     // Map database personas to Person interface
-    return personas.map((persona) => {
+    const mapped_personas = personas.map((persona) => {
         // Parse position if it exists, otherwise generate random position
         const position = persona.position
             ? (persona.position as { x: number; y: number; z: number })
@@ -44,6 +58,10 @@ export async function getPersonasByJobId(jobId: string): Promise<Person[]> {
             position,
         };
     });
+    return {
+        personas: mapped_personas,
+        completed: completed,
+    };
 }
 
 export async function getJobById(jobId: string) {
