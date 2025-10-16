@@ -7,11 +7,7 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronLeft, LogOut } from "lucide-react";
 import { CenteredVideoAnalysis } from "@/app/components/CenteredVideoAnalysis";
-import { TowaReactionModal } from "@/app/components/TowaReactionModal";
-import { SearchProgress } from "@/app/components/SearchProgress";
-import { ProfilesStream } from "@/app/components/ProfilesStream";
 import { ExpandedReport } from "@/app/components/AnalysisReport";
-import { VideoAnalysisSidebar } from "@/app/components/VideoAnalysisSidebar";
 import {
     getPersonasByJobId,
     getJobById,

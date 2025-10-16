@@ -64,45 +64,6 @@ export function PersonaReactionPanel({
     onAddToFeedback,
     projectId,
 }: PersonaReactionPanelProps) {
-    const [isRecording, setIsRecording] = useState(false);
-    const [isCallActive, setIsCallActive] = useState(false);
-    const reactionStyle = getReactionColor(person.reaction);
-
-    const handleStartCall = async () => {
-        try {
-            setIsCallActive(true);
-            setIsRecording(false);
-
-            // Get Supabase client
-            const supabase = createBrowserClient();
-
-            // Fetch job data to check is_dog_walker
-            const { data: job, error } = await supabase
-                .from("jobs")
-                .select("is_dog_walker")
-                .eq("id", projectId)
-                .single();
-
-            if (error) {
-                console.error("Error fetching job data:", error);
-                return;
-            }
-
-            // Make API call based on is_dog_walker value
-            const endpoint = job.is_dog_walker
-                ? "/vapi/calls/female"
-                : "/vapi/calls/male";
-
-            const response = await apiClient.POST(endpoint, {});
-
-            if (response.data) {
-                console.log("Call initiated successfully:", response.data);
-            }
-        } catch (error) {
-            console.error("Error starting call:", error);
-        }
-    };
-
     return (
         <Dialog open={true} onOpenChange={onClose}>
             <DialogContent
