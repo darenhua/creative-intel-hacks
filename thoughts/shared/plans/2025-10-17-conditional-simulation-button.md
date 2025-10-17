@@ -97,9 +97,9 @@ const handleRunSimulation = async () => {
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] TypeScript compilation succeeds: `npm run build`
-- [ ] No type errors: `npm run typecheck`
-- [ ] Linting passes: `npm run lint`
+- [x] TypeScript compilation succeeds: `npm run build`
+- [x] No type errors: `npm run typecheck`
+- [x] Linting passes: `npm run lint`
 
 #### Manual Verification:
 - [ ] Dashboard page loads without errors
@@ -171,9 +171,9 @@ export function InteractiveNetworkViz({
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] TypeScript compilation succeeds: `npm run build`
-- [ ] No type errors: `npm run typecheck`
-- [ ] Linting passes: `npm run lint`
+- [x] TypeScript compilation succeeds: `npm run build`
+- [x] No type errors: `npm run typecheck`
+- [x] Linting passes: `npm run lint`
 
 #### Manual Verification:
 - [ ] Button text shows "Run Simulation" when no responses exist

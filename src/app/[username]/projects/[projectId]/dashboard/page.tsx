@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ import {
 } from "@/app/actions/personas";
 import type { Person } from "@/types/shared";
 import apiClient from "@/lib/api-client";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export default function DashboardPage() {
     const { username, projectId } = useParams();
@@ -24,6 +25,14 @@ export default function DashboardPage() {
 
     const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
     const [showFeedback, setShowFeedback] = useState(false);
+
+    const isLargeScreen = useMediaQuery("(min-width: 1280px)");
+    const [isPanelVisible, setIsPanelVisible] = useState(false);
+
+    // Initialize panel visibility based on screen size
+    useEffect(() => {
+        setIsPanelVisible(isLargeScreen);
+    }, [isLargeScreen]);
 
     // Fetch persona responses to determine state
     const { data: personaResponses, isLoading: responsesLoading } = useQuery({
@@ -34,7 +43,6 @@ export default function DashboardPage() {
 
     // Determine if we're in responses state (STATE B) or personas state (STATE A)
     const isResponsesState = personaResponses && personaResponses.length > 0;
-
     // Fetch personas for this job (projectId = jobId)
     const { data: fetchedPersonas, isLoading: personasLoading } = useQuery({
         queryKey: ["personas", projectId],
@@ -81,11 +89,17 @@ export default function DashboardPage() {
 
     const handleRunSimulation = async () => {
         try {
-            // Trigger persona response generation
-            await createResponses();
+            // Check if persona responses already exist
+            if (isResponsesState) {
+                // Responses already exist, navigate directly without API call
+                router.push(`/${username}/projects/${projectId}/simulation`);
+            } else {
+                // No responses yet, trigger persona response generation
+                await createResponses();
 
-            // Navigate to simulation page
-            router.push(`/${username}/projects/${projectId}/simulation`);
+                // Navigate to simulation page
+                router.push(`/${username}/projects/${projectId}/simulation`);
+            }
         } catch (error) {
             console.error("Error generating responses:", error);
         }
@@ -133,7 +147,7 @@ export default function DashboardPage() {
                 </div>
             </div>
 
-            <div className="flex h-[calc(100vh-73px)] relative mr-[395px]">
+            <div className={`flex h-[calc(100vh-73px)] relative transition-all duration-300 ${isPanelVisible ? 'mr-[395px]' : 'mr-0'}`}>
                 {/* Main Area - Interactive Network Visualization */}
                 <div className="flex-1 relative">
                     <InteractiveNetworkViz
@@ -143,6 +157,7 @@ export default function DashboardPage() {
                         onRunSimulation={handleRunSimulation}
                         showInterest={false}
                         projectId={projectId as string}
+                        hasResponses={isResponsesState}
                     />
                 </div>
             </div>
@@ -160,10 +175,14 @@ export default function DashboardPage() {
                 )}
             </AnimatePresence>
 
-            <PersonasPanel
-                people={personas}
-                onClose={() => setShowFeedback(false)}
-            />
+            <AnimatePresence>
+                {isPanelVisible && (
+                    <PersonasPanel
+                        people={personas}
+                        onClose={() => setIsPanelVisible(false)}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 }

@@ -20,6 +20,7 @@ import {
 import { mockPeople } from "@/lib/mockPeople";
 import type { Person } from "@/types/shared";
 import { FeedbackPanel } from "@/app/components/FeedbackPanel";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export default function SimulationPage() {
     const { username, projectId } = useParams();
@@ -39,6 +40,14 @@ export default function SimulationPage() {
 
     // Prompt state
     const [prompt, setPrompt] = useState("");
+
+    const isLargeScreen = useMediaQuery("(min-width: 1280px)");
+    const [isPanelVisible, setIsPanelVisible] = useState(false);
+
+    // Initialize panel visibility based on screen size
+    useEffect(() => {
+        setIsPanelVisible(isLargeScreen);
+    }, [isLargeScreen]);
 
     // Fetch personas for this job (projectId = jobId)
     const { data: fetchedPersonas, isLoading: personasLoading } = useQuery({
@@ -174,7 +183,7 @@ export default function SimulationPage() {
     });
 
     return (
-        <div className="h-screen bg-black text-white overflow-hidden relative mr-80">
+        <div className={`h-screen bg-black text-white overflow-hidden relative transition-all duration-300 ${isPanelVisible ? 'mr-80' : 'mr-0'}`}>
             {/* Header */}
             <div className="border-b border-gray-800/50 bg-black/80 backdrop-blur-sm relative z-50">
                 <div className="flex items-center justify-between px-6 py-4">
@@ -291,12 +300,14 @@ export default function SimulationPage() {
                 )}
             </AnimatePresence>
 
-            <FeedbackPanel
-                personaResponses={personaResponses || []}
-                onClose={() => setShowFeedback(false)}
-                analysisData={analysisData}
-                showAnalysisReport={true}
-            />
+            {isPanelVisible && (
+                <FeedbackPanel
+                    personaResponses={personaResponses || []}
+                    onClose={() => setIsPanelVisible(false)}
+                    analysisData={analysisData}
+                    showAnalysisReport={true}
+                />
+            )}
         </div>
     );
 }

@@ -19,6 +19,7 @@ interface InteractiveNetworkVizProps {
     people?: Person[];
     showInterest?: boolean;
     projectId?: string;
+    hasResponses?: boolean;
 }
 
 const generatePersonas = (): PersonaNode[] => {
@@ -201,6 +202,7 @@ export function InteractiveNetworkViz({
     people,
     showInterest = false,
     projectId,
+    hasResponses = false,
 }: InteractiveNetworkVizProps) {
     // Note: isRunning prop is available for future use
     // Use the people prop if provided, otherwise generate personas
@@ -418,7 +420,7 @@ export function InteractiveNetworkViz({
                     </linearGradient>
                 </defs>
 
-                {personas.map((persona) => (
+                {personas?.map((persona) => (
                     <motion.line
                         key={`line-${persona.id}`}
                         x1="50%"
@@ -445,7 +447,7 @@ export function InteractiveNetworkViz({
             </svg>
 
             {/* Persona nodes */}
-            {personas.map((persona, index) => (
+            {personas?.map((persona, index) => (
                 <motion.div
                     key={persona.id}
                     className="absolute cursor-pointer z-20"
@@ -588,7 +590,7 @@ export function InteractiveNetworkViz({
                 >
                     <Button
                         onClick={handleRunSimulation}
-                        disabled={personas.length === 0 || creatingResponses}
+                        disabled={personas?.length === 0 || creatingResponses}
                         className="px-8 py-4 text-white border-2 border-transparent relative overflow-hidden group text-lg shadow-2xl"
                         style={{
                             background:
@@ -608,7 +610,9 @@ export function InteractiveNetworkViz({
                             <Play className="w-5 h-5" />
                             {creatingResponses
                                 ? "Generating Responses..."
-                                : "Run Simulation"}
+                                : hasResponses
+                                  ? "Return to Simulation"
+                                  : "Run Simulation"}
                         </span>
                     </Button>
                 </motion.div>
