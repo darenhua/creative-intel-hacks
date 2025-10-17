@@ -75,8 +75,7 @@ export default function UploadPage() {
                     .from("ads")
                     .insert({
                         video_url: publicUrl,
-                        description:
-                            "This video is a unprofessionally shot video of an asian man promoting a hackathon. It is not very well lit, but if you are a person who is into ad tech, or if you like hackathons in general, a general person might think this is unprofessional, maybe funny how unprofessional it is, but at least you're interested in going. If you don't like ads or hackathon, you'll wonder why you're being shown a piece of crap unprofessional video for ad tech hackathon.",
+                        description: null, // Will be filled by TwelveLabs analysis
                     })
                     .select()
                     .single();

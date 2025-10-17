@@ -10,11 +10,13 @@ import { InteractiveNetworkViz } from "@/app/components/InteractiveNetworkViz";
 import { TowaReactionModal } from "@/app/components/TowaReactionModal";
 import { PersonasPanel } from "@/app/components/PersonasPanel";
 import { MissionStatus } from "@/app/components/MissionStatus";
+import { VideoAnalysisLoader } from "@/app/components/VideoAnalysisLoader";
 import {
     getPersonasByJobId,
     getJobById,
     getPersonaResponses,
 } from "@/app/actions/personas";
+import { getVideoAnalysisStatus } from "@/app/actions/video-status";
 import type { Person } from "@/types/shared";
 import apiClient from "@/lib/api-client";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -67,6 +69,22 @@ export default function DashboardPage() {
         enabled: !!projectId,
     });
 
+    // Poll video analysis status
+    const { data: videoStatus } = useQuery({
+        queryKey: ["videoStatus", projectId],
+        queryFn: () => getVideoAnalysisStatus(projectId as string),
+        enabled: !!projectId,
+        refetchInterval: (query) => {
+            // Stop polling if analysis is complete
+            if (query.state.data && !query.state.data.isAnalyzing) {
+                return false;
+            }
+            // Poll every 2 seconds while analyzing
+            return 2000;
+        },
+    });
+
+    const isAnalyzing = videoStatus?.isAnalyzing ?? false;
     const isLoading = jobLoading;
 
     // Use fetched personas if available, otherwise fallback to mock data
@@ -158,6 +176,7 @@ export default function DashboardPage() {
                         showInterest={false}
                         projectId={projectId as string}
                         hasResponses={isResponsesState}
+                        isAnalyzing={isAnalyzing}
                     />
                 </div>
             </div>
@@ -182,6 +201,11 @@ export default function DashboardPage() {
                         onClose={() => setIsPanelVisible(false)}
                     />
                 )}
+            </AnimatePresence>
+
+            {/* Video Analysis Loading Indicator */}
+            <AnimatePresence>
+                {isAnalyzing && <VideoAnalysisLoader />}
             </AnimatePresence>
         </div>
     );

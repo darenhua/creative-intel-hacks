@@ -20,6 +20,7 @@ interface InteractiveNetworkVizProps {
     showInterest?: boolean;
     projectId?: string;
     hasResponses?: boolean;
+    isAnalyzing?: boolean;
 }
 
 const generatePersonas = (): PersonaNode[] => {
@@ -203,6 +204,7 @@ export function InteractiveNetworkViz({
     showInterest = false,
     projectId,
     hasResponses = false,
+    isAnalyzing = false,
 }: InteractiveNetworkVizProps) {
     // Note: isRunning prop is available for future use
     // Use the people prop if provided, otherwise generate personas
@@ -590,7 +592,7 @@ export function InteractiveNetworkViz({
                 >
                     <Button
                         onClick={handleRunSimulation}
-                        disabled={personas?.length === 0 || creatingResponses}
+                        disabled={personas?.length === 0 || creatingResponses || isAnalyzing}
                         className="px-8 py-4 text-white border-2 border-transparent relative overflow-hidden group text-lg shadow-2xl"
                         style={{
                             background:
@@ -608,11 +610,13 @@ export function InteractiveNetworkViz({
                         />
                         <span className="relative z-10 flex items-center gap-2">
                             <Play className="w-5 h-5" />
-                            {creatingResponses
-                                ? "Generating Responses..."
-                                : hasResponses
-                                  ? "Return to Simulation"
-                                  : "Run Simulation"}
+                            {isAnalyzing
+                                ? "Analyzing Video..."
+                                : creatingResponses
+                                  ? "Generating Responses..."
+                                  : hasResponses
+                                    ? "Return to Simulation"
+                                    : "Run Simulation"}
                         </span>
                     </Button>
                 </motion.div>

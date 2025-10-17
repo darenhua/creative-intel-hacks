@@ -139,16 +139,29 @@ export function ProjectDashboard({
 
                                         {/* Content */}
                                         <div className="space-y-4 relative z-10">
-                                            {/* Date */}
-                                            <div className="flex items-center gap-2 text-xs text-white/50">
-                                                <Calendar className="w-3 h-3" />
-                                                {new Date(
-                                                    project.date
-                                                ).toLocaleDateString("en-US", {
-                                                    month: "short",
-                                                    day: "2-digit",
-                                                    year: "numeric",
-                                                })}
+                                            {/* Date and Status */}
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2 text-xs text-white/50">
+                                                    <Calendar className="w-3 h-3" />
+                                                    {new Date(
+                                                        project.date
+                                                    ).toLocaleDateString("en-US", {
+                                                        month: "short",
+                                                        day: "2-digit",
+                                                        year: "numeric",
+                                                    })}
+                                                </div>
+                                                {project.title && project.title !== "Untitled Project" ? (
+                                                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/10 border border-green-500/20">
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
+                                                        <span className="text-xs text-green-400 font-medium">Ready</span>
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                                                        <span className="text-xs text-amber-400 font-medium">Setup</span>
+                                                    </div>
+                                                )}
                                             </div>
 
                                             {/* Project Title */}
@@ -164,7 +177,9 @@ export function ProjectDashboard({
                                             {/* View Button */}
                                             <div className="pt-2">
                                                 <div className="w-full py-2.5 px-4 text-center text-white/70 text-sm hover:text-white border border-white/10 hover:border-white/30 hover:bg-white/5 transition-all duration-200 rounded-lg group-hover:border-white/40">
-                                                    View Project →
+                                                    {project.title && project.title !== "Untitled Project"
+                                                        ? "View Dashboard →"
+                                                        : "Setup Project →"}
                                                 </div>
                                             </div>
                                         </div>

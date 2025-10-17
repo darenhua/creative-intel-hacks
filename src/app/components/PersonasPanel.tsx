@@ -55,7 +55,7 @@ export function PersonasPanel({ people, onClose }: PersonasPanelProps) {
                                 lineHeight: "1",
                             }}
                         >
-                            {people.length}
+                            {people?.length}
                         </div>
                         <div
                             className="text-white/60"
@@ -113,7 +113,7 @@ export function PersonasPanel({ people, onClose }: PersonasPanelProps) {
                     </h3>
 
                     <div className="space-y-4">
-                        {people.map((person, index) => (
+                        {people?.map((person, index) => (
                             <motion.div
                                 key={person.id}
                                 initial={{ opacity: 0, y: 10 }}
