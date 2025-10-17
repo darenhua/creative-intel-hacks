@@ -1,0 +1,1 @@
+git clone --depth=1 --filter=blob:none --sparse https://github.com/humanlayer/humanlayer.git temp_clone && cd temp_clone && git sparse-checkout set .claude && cd .. && cp -r temp_clone/.claude . && rm -rf temp_clone

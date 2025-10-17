@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { Button } from "../../components/ui/button";
-import { Badge } from "../../components/ui/badge";
 import { motion } from "motion/react";
 import { LogOut, Calendar, Plus } from "lucide-react";
 import type { Project } from "@/types/shared";
@@ -22,14 +20,7 @@ export function ProjectDashboard({
     onLogout,
 }: ProjectDashboardProps) {
     return (
-        <div
-            className="min-h-screen text-[#E5E5E5] relative overflow-hidden"
-            style={{
-                backgroundColor: "#000000",
-                fontFamily:
-                    'JetBrains Mono, Consolas, Monaco, "Courier New", monospace',
-            }}
-        >
+        <div className="min-h-screen bg-black text-white relative overflow-hidden">
             {/* Page fade-in animation */}
             <motion.div
                 initial={{ opacity: 0 }}
@@ -37,41 +28,31 @@ export function ProjectDashboard({
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="relative z-10"
             >
-                {/* Top Navigation */}
-                <div
-                    className="relative z-10 border-b"
-                    style={{ borderColor: "#333333" }}
-                >
-                    <div className="px-8 py-6">
-                        <div className="flex items-center justify-between">
-                            {/* Left: Logo */}
-                            <div className="flex items-center gap-4">
-                                <TowaIcon className="h-8 w-auto" />
-                                <span className="text-lg font-medium tracking-wider text-[#E5E5E5]">
-                                    TOWA
-                                </span>
-                                <span className="text-sm text-[#666666] ml-2 uppercase tracking-wider">
-                                    projects
-                                </span>
+                {/* Header - matching nested pages style */}
+                <div className="border-b border-gray-800/50 bg-black/80 backdrop-blur-sm relative z-50">
+                    <div className="flex items-center justify-between px-6 py-4">
+                        <div className="flex items-center gap-4">
+                            <TowaIcon className="h-8 w-auto" />
+                            <div>
+                                <h1 className="text-xl text-white">Projects</h1>
+                                <p className="text-sm text-white/60">
+                                    Manage your AI simulation projects
+                                </p>
                             </div>
-
-                            {/* Right: User + Logout */}
-                            <div className="flex items-center gap-6">
-                                <div className="flex items-center gap-3 text-[#E5E5E5]">
-                                    <span className="font-medium">
-                                        {username}
-                                    </span>
-                                </div>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={onLogout}
-                                    className="text-[#E5E5E5] hover:text-[#000000] hover:bg-[#E5E5E5] border border-[#E5E5E5] bg-[#000000] transition-all duration-200 font-mono uppercase tracking-wide text-xs px-3 py-1"
-                                    style={{ borderRadius: "0px" }}
-                                >
-                                    Logout ↗
-                                </Button>
-                            </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <span className="text-sm text-white/70">
+                                {username}
+                            </span>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={onLogout}
+                                className="text-white/70 hover:text-white hover:bg-white/10"
+                            >
+                                <LogOut className="w-4 h-4 mr-1" />
+                                Logout
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -86,26 +67,45 @@ export function ProjectDashboard({
                     >
                         <div className="flex items-center justify-between">
                             <div>
-                                <h1 className="text-[24px] font-medium tracking-tight leading-tight mb-2 text-[#E5E5E5]">
-                                    Welcome {username}.
+                                <h1 className="text-3xl font-semibold text-white mb-2">
+                                    Welcome back, {username}
                                 </h1>
-                                <p className="text-[14px] text-[#999999] font-normal">
-                                    Manage your AI simulation projects and view
-                                    insights
+                                <p className="text-sm text-white/60">
+                                    View insights and manage your campaigns
                                 </p>
                             </div>
-                            <Button
-                                onClick={onNewProject}
-                                className="text-[#E5E5E5] hover:text-[#000000] hover:bg-[#E5E5E5] border border-[#E5E5E5] bg-[#000000] transition-all duration-200 font-mono uppercase tracking-wide text-xs px-4 py-2"
-                                style={{ borderRadius: "0px" }}
+                            <motion.div
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
                             >
-                                + New Project
-                            </Button>
+                                <Button
+                                    onClick={onNewProject}
+                                    className="px-6 py-3 text-white border-2 border-transparent relative overflow-hidden group"
+                                    style={{
+                                        background:
+                                            "linear-gradient(135deg, #6EE7B7, #2563EB, #A855F7)",
+                                        borderRadius: "12px",
+                                    }}
+                                >
+                                    <div
+                                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                        style={{
+                                            background:
+                                                "linear-gradient(135deg, rgba(110, 231, 183, 0.3), rgba(37, 99, 235, 0.3), rgba(168, 85, 247, 0.3))",
+                                            filter: "blur(4px)",
+                                        }}
+                                    />
+                                    <span className="relative z-10 flex items-center gap-2">
+                                        <Plus className="w-4 h-4" />
+                                        New Project
+                                    </span>
+                                </Button>
+                            </motion.div>
                         </div>
                     </motion.div>
                 </div>
 
-                {/* Project Grid - Strict 3x2 Layout */}
+                {/* Project Grid - Modern Glass Cards */}
                 <div className="relative z-10 px-8 pb-12">
                     <div className="max-w-7xl mx-auto">
                         <div className="grid grid-cols-3 gap-6">
@@ -120,19 +120,28 @@ export function ProjectDashboard({
                                         ease: "easeOut",
                                     }}
                                     className="group cursor-pointer"
+                                    onClick={() => onProjectSelect(project)}
                                 >
                                     <div
-                                        className="border p-6 bg-[#000000] hover:bg-[#111111] transition-all duration-200 relative"
+                                        className="p-6 bg-black/40 backdrop-blur-sm border border-gray-800/50 hover:border-white/20 transition-all duration-300 relative overflow-hidden rounded-2xl group-hover:shadow-xl"
                                         style={{
-                                            borderColor: "#333333",
-                                            borderRadius: "0px",
+                                            boxShadow: "0 0 40px rgba(110, 231, 183, 0.05)",
                                         }}
                                     >
+                                        {/* Gradient overlay on hover */}
+                                        <div
+                                            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                                            style={{
+                                                background:
+                                                    "linear-gradient(135deg, rgba(110, 231, 183, 0.03), rgba(37, 99, 235, 0.03), rgba(168, 85, 247, 0.03))",
+                                            }}
+                                        />
+
                                         {/* Content */}
-                                        <div className="space-y-4">
+                                        <div className="space-y-4 relative z-10">
                                             {/* Date */}
-                                            <div className="text-[11px] text-[#666666] font-mono">
-                                                ⊙{" "}
+                                            <div className="flex items-center gap-2 text-xs text-white/50">
+                                                <Calendar className="w-3 h-3" />
                                                 {new Date(
                                                     project.date
                                                 ).toLocaleDateString("en-US", {
@@ -143,71 +152,19 @@ export function ProjectDashboard({
                                             </div>
 
                                             {/* Project Title */}
-                                            <h3 className="text-[16px] font-medium text-[#E5E5E5] leading-tight font-mono h-12">
+                                            <h3 className="text-lg font-semibold text-white leading-tight">
                                                 {project.title}
                                             </h3>
 
                                             {/* Description */}
-                                            <p className="text-[12px] text-[#999999] leading-relaxed font-mono">
+                                            <p className="text-sm text-white/60 leading-relaxed min-h-[4rem]">
                                                 {project.description}
                                             </p>
 
-                                            {/* Progress */}
-                                            <div className="space-y-2">
-                                                <div className="flex items-center justify-between text-[11px]">
-                                                    <span className="text-[#666666] font-mono uppercase tracking-wider">
-                                                        {project.progress}%
-                                                    </span>
-                                                    <span className="text-[#666666] font-mono uppercase tracking-wider">
-                                                        {project.phase}
-                                                    </span>
-                                                </div>
-
-                                                {/* Progress Bar - Terminal Style */}
-                                                <div className="relative">
-                                                    <div
-                                                        className={`font-mono text-[10px] tracking-wider ${
-                                                            project.progress >=
-                                                            70
-                                                                ? "text-green-400"
-                                                                : project.progress >=
-                                                                  40
-                                                                ? "text-yellow-400"
-                                                                : "text-red-400"
-                                                        }`}
-                                                    >
-                                                        [
-                                                        {"█".repeat(
-                                                            Math.floor(
-                                                                project.progress /
-                                                                    5
-                                                            )
-                                                        )}
-                                                        {"░".repeat(
-                                                            20 -
-                                                                Math.floor(
-                                                                    project.progress /
-                                                                        5
-                                                                )
-                                                        )}
-                                                        ]
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* Open Project Button */}
+                                            {/* View Button */}
                                             <div className="pt-2">
-                                                <div
-                                                    className="w-full border py-2 px-4 text-center text-[#E5E5E5] text-[12px] font-mono hover:bg-[#E5E5E5] hover:text-[#000000] transition-all duration-200 uppercase tracking-wide bg-[#000000]"
-                                                    style={{
-                                                        borderColor: "#E5E5E5",
-                                                        borderRadius: "0px",
-                                                    }}
-                                                    onClick={() =>
-                                                        onProjectSelect(project)
-                                                    }
-                                                >
-                                                    Open Project →
+                                                <div className="w-full py-2.5 px-4 text-center text-white/70 text-sm hover:text-white border border-white/10 hover:border-white/30 hover:bg-white/5 transition-all duration-200 rounded-lg group-hover:border-white/40">
+                                                    View Project →
                                                 </div>
                                             </div>
                                         </div>
