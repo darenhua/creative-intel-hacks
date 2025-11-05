@@ -30,18 +30,18 @@ export function ProjectDashboard({
             >
                 {/* Header - matching nested pages style */}
                 <div className="border-b border-gray-800/50 bg-black/80 backdrop-blur-sm relative z-50">
-                    <div className="flex items-center justify-between px-6 py-4">
-                        <div className="flex items-center gap-4">
-                            <TowaIcon className="h-8 w-auto" />
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-4 sm:px-6 py-4">
+                        <div className="flex items-center gap-3 sm:gap-4">
+                            <TowaIcon className="h-6 sm:h-8 w-auto" />
                             <div>
-                                <h1 className="text-xl text-white">Projects</h1>
-                                <p className="text-sm text-white/60">
+                                <h1 className="text-lg sm:text-xl text-white">Projects</h1>
+                                <p className="text-xs sm:text-sm text-white/60 hidden sm:block">
                                     Manage your AI simulation projects
                                 </p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                            <span className="text-sm text-white/70">
+                        <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto justify-end">
+                            <span className="text-xs sm:text-sm text-white/70">
                                 {username}
                             </span>
                             <Button
@@ -50,37 +50,38 @@ export function ProjectDashboard({
                                 onClick={onLogout}
                                 className="text-white/70 hover:text-white hover:bg-white/10"
                             >
-                                <LogOut className="w-4 h-4 mr-1" />
-                                Logout
+                                <LogOut className="w-4 h-4 sm:mr-1" />
+                                <span className="hidden sm:inline">Logout</span>
                             </Button>
                         </div>
                     </div>
                 </div>
 
                 {/* Page Header */}
-                <div className="relative z-10 px-8 pt-12 pb-8">
+                <div className="relative z-10 px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 pb-6 sm:pb-8">
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, ease: "easeOut" }}
                         className="max-w-7xl mx-auto"
                     >
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6">
                             <div>
-                                <h1 className="text-3xl font-semibold text-white mb-2">
+                                <h1 className="text-2xl sm:text-3xl font-semibold text-white mb-2">
                                     Welcome back, {username}
                                 </h1>
-                                <p className="text-sm text-white/60">
+                                <p className="text-xs sm:text-sm text-white/60">
                                     View insights and manage your campaigns
                                 </p>
                             </div>
                             <motion.div
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
+                                className="w-full sm:w-auto"
                             >
                                 <Button
                                     onClick={onNewProject}
-                                    className="px-6 py-3 text-white border-2 border-transparent relative overflow-hidden group"
+                                    className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 text-white border-2 border-transparent relative overflow-hidden group"
                                     style={{
                                         background:
                                             "linear-gradient(135deg, #6EE7B7, #2563EB, #A855F7)",
@@ -95,7 +96,7 @@ export function ProjectDashboard({
                                             filter: "blur(4px)",
                                         }}
                                     />
-                                    <span className="relative z-10 flex items-center gap-2">
+                                    <span className="relative z-10 flex items-center justify-center gap-2">
                                         <Plus className="w-4 h-4" />
                                         New Project
                                     </span>
@@ -106,9 +107,9 @@ export function ProjectDashboard({
                 </div>
 
                 {/* Project Grid - Modern Glass Cards */}
-                <div className="relative z-10 px-8 pb-12">
+                <div className="relative z-10 px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12">
                     <div className="max-w-7xl mx-auto">
-                        <div className="grid grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                             {projects.map((project, index) => (
                                 <motion.div
                                     key={project.id}
@@ -123,7 +124,7 @@ export function ProjectDashboard({
                                     onClick={() => onProjectSelect(project)}
                                 >
                                     <div
-                                        className="p-6 bg-black/40 backdrop-blur-sm border border-gray-800/50 hover:border-white/20 transition-all duration-300 relative overflow-hidden rounded-2xl group-hover:shadow-xl"
+                                        className="p-4 sm:p-6 bg-black/40 backdrop-blur-sm border border-gray-800/50 hover:border-white/20 transition-all duration-300 relative overflow-hidden rounded-xl sm:rounded-2xl group-hover:shadow-xl"
                                         style={{
                                             boxShadow: "0 0 40px rgba(110, 231, 183, 0.05)",
                                         }}
@@ -165,18 +166,18 @@ export function ProjectDashboard({
                                             </div>
 
                                             {/* Project Title */}
-                                            <h3 className="text-lg font-semibold text-white leading-tight">
+                                            <h3 className="text-base sm:text-lg font-semibold text-white leading-tight">
                                                 {project.title}
                                             </h3>
 
                                             {/* Description */}
-                                            <p className="text-sm text-white/60 leading-relaxed min-h-[4rem]">
+                                            <p className="text-xs sm:text-sm text-white/60 leading-relaxed min-h-[3rem] sm:min-h-[4rem]">
                                                 {project.description}
                                             </p>
 
                                             {/* View Button */}
                                             <div className="pt-2">
-                                                <div className="w-full py-2.5 px-4 text-center text-white/70 text-sm hover:text-white border border-white/10 hover:border-white/30 hover:bg-white/5 transition-all duration-200 rounded-lg group-hover:border-white/40">
+                                                <div className="w-full py-2 sm:py-2.5 px-3 sm:px-4 text-center text-white/70 text-xs sm:text-sm hover:text-white border border-white/10 hover:border-white/30 hover:bg-white/5 transition-all duration-200 rounded-lg group-hover:border-white/40">
                                                     {project.title && project.title !== "Untitled Project"
                                                         ? "View Dashboard →"
                                                         : "Setup Project →"}
