@@ -109,7 +109,7 @@ Return your analysis in this EXACT JSON format (no markdown, no code blocks, jus
 Ensure percentages in sentiment add up to exactly 100.`;
 
     const message = await anthropic.messages.create({
-        model: "claude-3-5-sonnet-20241022",
+        model: "claude-sonnet-4-20250514",
         max_tokens: 2000,
         messages: [
             {
